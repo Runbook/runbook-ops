@@ -1,0 +1,4 @@
+
+telnet:
+  pkg:
+    - installed
