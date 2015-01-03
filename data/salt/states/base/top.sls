@@ -17,7 +17,10 @@ base:
     - sysdig
     - sysstat
     - telnet
+    - timezone
     - unzip
+    - users
+    - users.devops
     - vimrc
     - wget
   'salt*':
