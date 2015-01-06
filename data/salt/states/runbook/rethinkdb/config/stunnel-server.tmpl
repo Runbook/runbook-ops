@@ -1,0 +1,11 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+
+[rethink-{{ exposed_port }}]
+accept = 0.0.0.0:{{ exposed_port }}
+connect = 127.0.0.1:{{ local_port }}
+
+[rethink-28015]
+accept = 0.0.0.0:28015
+connect = 127.0.0.1:28115
