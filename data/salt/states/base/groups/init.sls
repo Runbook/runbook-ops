@@ -1,11 +1,3 @@
-## Groups should be the same on all servers
-## easier to avoid conflicts
-
-rethinkdb-group:
-  group.present:
-    - name: rethinkdb
-    - gid: 600
-
 devops:
   group.present:
     - gid: 700
