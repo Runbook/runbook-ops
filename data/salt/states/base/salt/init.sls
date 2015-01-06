@@ -1,4 +1,10 @@
 salt-minion:
+  pkgrepo:
+    - managed
+    - humanname: SaltStack Repo
+    - name: deb http://ppa.launchpad.net/saltstack/salt/ubuntu {{ grains['lsb_distrib_codename'] }} main
+    - dist: {{ grains['lsb_distrib_codename'] }}
+    - key_url: http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4759FA960E27C0A6
   pkg:
     - latest
   service:
