@@ -1,0 +1,3 @@
+unzip:
+  pkg:
+    - installed
