@@ -85,11 +85,11 @@ rethinkdb:
 
 
 rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-stop:
-  cmd.wait:
+  cmd.run:
     - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
     - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}"
     - order: 91
-    - watch:
+    - onchanges:
       - file: /data/rethinkdb/{{ instance }}/Dockerfile
       - file: /data/rethinkdb/{{ instance }}/config/rethink.conf
       - file: /data/rethinkdb/{{ instance }}/config/stunnel-client.conf
@@ -97,18 +97,11 @@ rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['node
       - file: /data/rethinkdb/{{ instance }}/config/supervisord.conf
       - file: /data/rethinkdb/{{ instance }}/config/ssl
 
-rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-cleanup:
-  cmd.wait:
-    - name: /usr/bin/docker rmi --force rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-    - order: 92
-    - watch:
-      - cmd: rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-stop
-
 rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}:
   docker.built:
     - path: /data/rethinkdb/{{ instance }}
     - order: 93
-    - watch:
+    - onchanges:
       - file: /data/rethinkdb/{{ instance }}/Dockerfile
       - file: /data/rethinkdb/{{ instance }}/config/rethink.conf
       - file: /data/rethinkdb/{{ instance }}/config/stunnel-client.conf
