@@ -86,7 +86,7 @@ rethinkdb:
 
 rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-stop:
   cmd.wait:
-    - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }
+    - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
     - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}"
     - order: 91
     - watch:
