@@ -1,0 +1,7 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+
+[redis-{{ exposed_port }}]
+accept = 0.0.0.0:{{ exposed_port }}
+connect = 127.0.0.1:{{ local_port }}

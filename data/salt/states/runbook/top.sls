@@ -4,5 +4,7 @@ runbook:
   'db*':
     - appusers.rethinkdb
     - appgroups.rethinkdb
-    - rethinkdb
     - certs.rethink
+    - certs.redis
+    - redis
+    - rethinkdb
