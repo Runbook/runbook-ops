@@ -97,13 +97,6 @@ rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['node
       - file: /data/rethinkdb/{{ instance }}/config/supervisord.conf
       - file: /data/rethinkdb/{{ instance }}/config/ssl
 
-rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-cleanup:
-  cmd.wait:
-    - name: /usr/bin/docker rmi --force rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-    - order: 92
-    - watch:
-      - cmd: rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-stop
-
 rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}:
   docker.built:
     - path: /data/rethinkdb/{{ instance }}
