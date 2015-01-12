@@ -51,11 +51,11 @@
 
 # Stop and Remove current redis container
 redis-{{ pillar['redis']['local_port'] }}-stop:
-  cmd.run:
+  cmd.wait:
     - name: /usr/bin/docker rm --force --volumes=false redis-{{ pillar['redis']['local_port'] }}
     - onlyif: /usr/bin/docker ps | /bin/grep -q "redis-{{ pillar['redis']['local_port'] }}"
-    - order: 101
-    - onchanges:
+    - order: 102
+    - watch:
       - file: /data/redis/Dockerfile
       - file: /data/redis/config/redis.conf
       - file: /data/redis/config/stunnel-server.conf
@@ -67,7 +67,7 @@ redis-{{ pillar['redis']['local_port'] }}:
   docker.built:
     - path: /data/redis
     - order: 103
-    - onchanges:
+    - watch:
       - file: /data/redis/Dockerfile
       - file: /data/redis/config/redis.conf
       - file: /data/redis/config/stunnel-server.conf
@@ -81,7 +81,7 @@ redis-{{ pillar['redis']['local_port'] }}-start:
               /usr/bin/docker run -d -p "{{ pillar['redis']['exposed_port'] }}:{{ pillar['redis']['exposed_port'] }}" \
               -v "/data/redis:/data/redis" --name "redis-{{ pillar['redis']['local_port'] }}" \
               redis-{{ pillar['redis']['local_port'] }}
-    - onlyif: /usr/bin/docker ps | /bin/grep redis-{{ pillar['redis']['local_port'] }}
+    - unless: /usr/bin/docker ps | /bin/grep redis-{{ pillar['redis']['local_port'] }}
     - order: 104
     - require:
       - docker: redis-{{ pillar['redis']['local_port'] }}
