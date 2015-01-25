@@ -1,0 +1,10 @@
+## Broker Configuration
+## zMQ
+broker_ip: 127.0.0.1
+broker_control_port: {{ local_control_port }}
+broker_worker_port: {{ local_worker_port }}
+## StatHat EZ Key
+stathat_ez_key: {{ stathat_ezkey }}
+envname: [{{ stathat_env }}]
+## Logging
+use_syslog: False

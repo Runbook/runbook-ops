@@ -1,0 +1,11 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+
+[broker-{{ exposed_worker_port }}]
+accept = 0.0.0.0:{{ exposed_worker_port }}
+connect = 127.0.0.1:{{ local_worker_port }}
+
+[broker-{{ exposed_control_port }}]
+accept = 0.0.0.0:{{ exposed_control_port }}
+connect = 127.0.0.1:{{ local_control_port }}
