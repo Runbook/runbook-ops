@@ -1,21 +1,26 @@
 runbook:
   '*':
     - certs
-  'db*':
+  '*rethinkdb*':
     - appusers.rethinkdb
     - appgroups.rethinkdb
     - certs.rethink
+    - rethinkdb
+  '*redis*':
     - certs.redis
     - redis
-    - rethinkdb
-  'web*':
+  '*web*':
     - runbook
-  'control*':
+  '*control*':
+    - runbook
+    - certs.monitors.control
+  '*monitorbroker*':
     - runbook
     - runbook.monitors.broker
     - certs.monitors.broker
-    - certs.monitors.control
-  'worker*':
+  '*worker*':
     - runbook
     - certs.monitors.worker
+  '*actioner*':
+    - runbook
     - certs.actions.actioner
