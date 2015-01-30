@@ -64,6 +64,7 @@ monitorbroker-stop:
     - onlyif: /usr/bin/docker ps | /bin/grep -q "monitorbroker"
     - order: 112
     - watch:
+      - git: runbook_source
       - file: /data/runbook/monitors/broker/Dockerfile
       - file: /data/runbook/monitors/broker/config/broker.yml
       - file: /data/runbook/monitors/broker/config/stunnel-server.conf
@@ -76,6 +77,7 @@ monitorbroker:
     - path: /data/runbook/monitors/broker
     - order: 113
     - watch:
+      - cmd: monitorbroker-stop
       - file: /data/runbook/monitors/broker/Dockerfile
       - file: /data/runbook/monitors/broker/config/broker.yml
       - file: /data/runbook/monitors/broker/config/stunnel-server.conf
