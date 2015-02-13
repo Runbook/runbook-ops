@@ -2,9 +2,9 @@ cert = /config/cert.pem
 key = /config/key.pem
 foreground = yes
 
-[rethink-{{ exposed_port }}]
-accept = 0.0.0.0:{{ exposed_port }}
-connect = 127.0.0.1:{{ local_port }}
+[rethink-{{ cluster_exposed_port }}]
+accept = 0.0.0.0:{{ cluster_exposed_port }}
+connect = 127.0.0.1:{{ cluster_local_port }}
 
 [rethink-28015]
 accept = 0.0.0.0:28015

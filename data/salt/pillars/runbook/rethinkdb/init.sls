@@ -1,2 +1,0 @@
-rethink_instances:
-  - crdb

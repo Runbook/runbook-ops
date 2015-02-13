@@ -4,7 +4,6 @@ runbook:
     - stathat
   '*rethinkdb*':
     - rethinkdb
-    - rethinkdb.cluster
   '*redis*':
     - redis
   '*control*':

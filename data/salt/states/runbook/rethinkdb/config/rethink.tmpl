@@ -1,10 +1,11 @@
 directory=/data/rethinkdb/instances/{{ dbpath }}
 bind=all
-cluster-port={{ local_port }}
+cluster-port={{ cluster_local_port }}
 driver-port=28115
 {% for host, port in rethink_cluster.iteritems() %}
-{% set myport = cluster_port %}
+{% set myport = cluster_exposed_port %}
 {% if port != myport %}
 join=127.0.0.1:{{ port }}
 {% endif %}
 {% endfor %}
+server-name={{ server_name }}

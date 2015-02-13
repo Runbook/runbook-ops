@@ -1,0 +1,10 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+client = yes
+
+[rethink-client]
+accept = 127.0.0.1:28015
+{% for host, port in rethink['rethink_cluster'].iteritems() %}
+connect = {{ host }}:{{ port }}
+{% endfor %}
