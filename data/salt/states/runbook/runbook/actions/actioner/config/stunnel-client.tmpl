@@ -8,3 +8,7 @@ accept = 127.0.0.1:28015
 {% for host, port in rethink['rethink_cluster'].iteritems() %}
 connect = {{ host }}:{{ port }}
 {% endfor %}
+
+[redis-client]
+accept = 127.0.0.1:{{ redis['local_port'] }}
+connect = 
