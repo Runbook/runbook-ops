@@ -12,8 +12,8 @@ rethink_authkey: {{ rethink['authkey'] }}
 rethink_db: "crdb"
 ## Sink Config
 sink_ip: 127.0.0.1
-sink_port: {{ actions_broker['local_sink_port'] }}
-sink_worker_port: {{ actions_broker['local_actioner_port'] }}
+sink_port: {{ action_broker['local_sink_port'] }}
+sink_worker_port: {{ action_broker['local_actioner_port'] }}
 ## Maximum time for monitor execution
 max_monitor_time: 600
 default_actions:

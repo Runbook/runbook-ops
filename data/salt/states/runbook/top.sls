@@ -26,6 +26,7 @@ runbook:
     - certs.monitors.worker
   '*actioner*':
     - runbook
+    - runbook.actions.actioner
     - certs.actions.actioner
   '*actionbroker*':
     - runbook

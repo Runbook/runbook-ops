@@ -5,6 +5,13 @@
     - mode: 700
     - makedirs: True
 
+/data/runbook/actions/broker/data:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 700
+    - makedirs: True
+
 /data/runbook/actions/broker/config/broker.yml:
   file.managed:
     - source: salt://runbook/actions/broker/config/broker.yml

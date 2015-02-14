@@ -1,6 +1,7 @@
 runbook:
   '*':
     - general
+    - general.hosts
     - stathat
   '*rethinkdb*':
     - rethinkdb
@@ -16,3 +17,7 @@ runbook:
     - runbook.actions.broker
   '*actioner*':
     - runbook.actions.broker
+    - rethinkdb
+    - redis
+    - mailchimp
+    - mandrill

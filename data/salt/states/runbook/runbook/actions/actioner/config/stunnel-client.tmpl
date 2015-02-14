@@ -5,10 +5,16 @@ client = yes
 
 [rethink-client]
 accept = 127.0.0.1:28015
-{% for host, port in rethink['rethink_cluster'].iteritems() %}
+{% for host, port in rethink['cluster'].iteritems() %}
 connect = {{ host }}:{{ port }}
 {% endfor %}
 
 [redis-client]
 accept = 127.0.0.1:{{ redis['local_port'] }}
-connect = 
+connect = {{ hosts['redis'] }}:{{ redis['exposed_port'] }}
+
+[actionbroker-client-{{ action_broker['local_actioner_port'] }}]
+accept = 127.0.0.1:{{ action_broker['local_actioner_port'] }}
+{% for host in hosts['actionbroker'] %}
+connect = {{ host }}:{{ action_broker['exposed_actioner_port'] }}
+{% endfor %}
