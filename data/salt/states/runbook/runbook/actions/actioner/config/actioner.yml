@@ -1,0 +1,37 @@
+stathat_key: {{ stathat_ezkey }}
+envname: {{ stathat_env }}
+## Redis Config
+redis_host: 127.0.0.1
+redis_port: {{ redis['local_port'] }}
+redis_db: 0
+redis_password: {{ redis['pass'] }}
+## Rethink Config
+rethink_host: 127.0.0.1
+rethink_port: 28015
+rethink_authkey: {{ rethink['authkey'] }}
+rethink_db: "crdb"
+## Sink Config
+sink_ip: 127.0.0.1
+sink_port: {{ action_broker['local_sink_port'] }}
+sink_worker_port: {{ action_broker['local_actioner_port'] }}
+## Maximum time for monitor execution
+max_monitor_time: 600
+default_actions:
+  - logit-monitor
+  - logit-events
+  - chstatus
+  - timetracking
+reaction_meta:
+  - logit-reaction
+  - update-lastrun
+## History Retention
+history_retention: 18000
+## MailChimp
+mailchimp_api_key: {{ mailchimp['api_key'] }}
+mailchimp_list_id: {{ mailchimp['list_id'] }}
+mailchimp_api_url: {{ mailchimp['api_url'] }}
+## Mandrill
+mandrill_api_url: "https://mandrillapp.com/api/1.0/"
+mandrill_api_key: {{ mandrill['api_key'] }}
+## Logging
+use_syslog: False

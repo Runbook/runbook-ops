@@ -26,8 +26,8 @@ ADD config/ssl/key.pem /config/key.pem
 ADD config/ssl/cert.pem /config/cert.pem
 
 # Expose Ports
-EXPOSE {{ cluster_port }}
-EXPOSE {{ local_port }}
+EXPOSE {{ cluster_exposed_port }}
+EXPOSE {{ cluster_local_port }}
 EXPOSE 28015
 EXPOSE 8080
 

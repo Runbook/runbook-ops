@@ -1,0 +1,2 @@
+*.py linguist-language=Python
+*.sls linguist-language=SaltStack

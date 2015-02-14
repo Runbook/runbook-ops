@@ -1,0 +1,4 @@
+sink_ip: 127.0.0.1
+sink_port: {{ local_sink_port }}
+sink_worker_port: {{ local_actioner_port }}
+use_syslog: False

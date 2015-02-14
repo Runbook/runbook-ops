@@ -11,6 +11,9 @@ runbook:
     - redis
   '*web*':
     - runbook
+  '*bridge*':
+    - runbook
+    - certs.bridge
   '*control*':
     - runbook
     - certs.monitors.control
@@ -23,4 +26,10 @@ runbook:
     - certs.monitors.worker
   '*actioner*':
     - runbook
+    - runbook.actions.actioner
     - certs.actions.actioner
+  '*actionbroker*':
+    - runbook
+    - runbook.actions.broker
+    - certs.actions.broker
+

@@ -14,16 +14,14 @@ rethinkdb:
     - dead
     - enable: False
 
-{% for instance in pillar['rethink_instances'] %}
-
-/data/rethinkdb/{{ instance }}/data:
+/data/rethinkdb/data:
   file.directory:
     - user: root
     - group: root
     - mode: 750
     - makedirs: True
 
-/data/rethinkdb/{{ instance }}/config/rethink.conf:
+/data/rethinkdb/config/rethink.conf:
   file.managed:
     - source: salt://rethinkdb/config/rethink.tmpl
     - user: root
@@ -32,12 +30,13 @@ rethinkdb:
     - makedirs: True
     - template: jinja
     - context:
-      rethink_cluster: {{ pillar[instance]['rethink_cluster'] }}
-      dbpath: {{ instance }}
-      cluster_port: {{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}
-      local_port: {{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
+      rethink_cluster: {{ pillar['rethink']['cluster'] }}
+      dbpath: {{ pillar['rethink']['db'] }}
+      cluster_exposed_port: {{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}
+      cluster_local_port: {{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
+      server_name: {{ grains['nodename'] }}-{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}
 
-/data/rethinkdb/{{ instance }}/config/stunnel-server.conf:
+/data/rethinkdb/config/stunnel-server.conf:
   file.managed:
     - source: salt://rethinkdb/config/stunnel-server.tmpl
     - user: root
@@ -46,10 +45,10 @@ rethinkdb:
     - makedirs: True
     - template: jinja
     - context:
-      exposed_port: {{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}
-      local_port: {{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
+      cluster_exposed_port: {{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}
+      cluster_local_port: {{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
 
-/data/rethinkdb/{{ instance }}/config/stunnel-client.conf:
+/data/rethinkdb/config/stunnel-client.conf:
   file.managed:
     - source: salt://rethinkdb/config/stunnel-client.tmpl
     - user: root
@@ -58,11 +57,11 @@ rethinkdb:
     - makedirs: True
     - template: jinja
     - context:
-      local_port: {{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-      cluster_port: {{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}
-      rethink_cluster: {{ pillar[instance]['rethink_cluster'] }}
+      cluster_local_port: {{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
+      cluster_exposed_port: {{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}
+      rethink_cluster: {{ pillar['rethink']['cluster'] }}
     
-/data/rethinkdb/{{ instance }}/config/supervisord.conf:
+/data/rethinkdb/config/supervisord.conf:
   file.managed:
     - source: salt://rethinkdb/config/supervisord.conf
     - user: root
@@ -70,7 +69,7 @@ rethinkdb:
     - mode: 640
     - makedirs: True
 
-/data/rethinkdb/{{ instance }}/Dockerfile:
+/data/rethinkdb/Dockerfile:
   file.managed:
     - source: salt://rethinkdb/config/Dockerfile
     - user: root
@@ -79,47 +78,47 @@ rethinkdb:
     - makedirs: True
     - template: jinja
     - context:
-      cluster_port: {{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}
-      local_port: {{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-      instance: {{ instance }}
+      cluster_exposed_port: {{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}
+      cluster_local_port: {{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
+      instance: {{ pillar['rethink']['db'] }}
 
 
-rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}-stop:
+rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}-stop:
   cmd.wait:
-    - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-    - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}"
+    - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
+    - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}"
     - order: 91
     - watch:
-      - file: /data/rethinkdb/{{ instance }}/Dockerfile
-      - file: /data/rethinkdb/{{ instance }}/config/rethink.conf
-      - file: /data/rethinkdb/{{ instance }}/config/stunnel-client.conf
-      - file: /data/rethinkdb/{{ instance }}/config/stunnel-server.conf
-      - file: /data/rethinkdb/{{ instance }}/config/supervisord.conf
-      - file: /data/rethinkdb/{{ instance }}/config/ssl
+      - file: /data/rethinkdb/Dockerfile
+      - file: /data/rethinkdb/config/rethink.conf
+      - file: /data/rethinkdb/config/stunnel-client.conf
+      - file: /data/rethinkdb/config/stunnel-server.conf
+      - file: /data/rethinkdb/config/supervisord.conf
+      - file: /data/rethinkdb/config/ssl
 
-rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}:
+rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:
   docker.built:
-    - path: /data/rethinkdb/{{ instance }}
+    - path: /data/rethinkdb
     - order: 93
     - watch:
-      - file: /data/rethinkdb/{{ instance }}/Dockerfile
-      - file: /data/rethinkdb/{{ instance }}/config/rethink.conf
-      - file: /data/rethinkdb/{{ instance }}/config/stunnel-client.conf
-      - file: /data/rethinkdb/{{ instance }}/config/stunnel-server.conf
-      - file: /data/rethinkdb/{{ instance }}/config/supervisord.conf
-      - file: /data/rethinkdb/{{ instance }}/config/ssl
+      - file: /data/rethinkdb/Dockerfile
+      - file: /data/rethinkdb/config/rethink.conf
+      - file: /data/rethinkdb/config/stunnel-client.conf
+      - file: /data/rethinkdb/config/stunnel-server.conf
+      - file: /data/rethinkdb/config/supervisord.conf
+      - file: /data/rethinkdb/config/ssl
 
-start-rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}:
+start-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:
   cmd.run:
     - name: |
-              /usr/bin/docker run -d -p "28015:28015" -p "{{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}:{{ pillar[instance]['rethink_cluster_ports'][grains['nodename']] }}" \
-              -p "127.0.0.1:8080:8080" -p "127.0.0.1:{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}:{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}" \
-              -v "/data/rethinkdb/{{ instance }}/data:/data/rethinkdb/instances/{{ instance }}" \
-              --name rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }} \
-              rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-    - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}"
+              /usr/bin/docker run -d -p "28015:28015" \
+              -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" \
+              -p "127.0.0.1:8080:8080" \
+              -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" \
+              -v "/data/rethinkdb/data:/data/rethinkdb/instances/{{ pillar['rethink']['db'] }}" \
+              --name rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }} \
+              rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
+    - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}"
     - order: 94
     - require:
-      - docker: rethinkdb-{{ instance }}-{{ pillar[instance]['rethink_local_ports'][grains['nodename']] }}
-
-{% endfor %}
+      - docker: rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
