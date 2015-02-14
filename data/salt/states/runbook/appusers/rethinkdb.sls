@@ -2,7 +2,7 @@ rethinkuser:
   user.present:
     - name: rethinkdb
     - fullname: RethinkDB
-    - shell: /bin/bash
+    - shell: /usr/sbin/nologin
     - home: /home/rethinkdb
     - createhome: True
     - uid: 3000
