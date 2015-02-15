@@ -30,3 +30,11 @@ salt-api:
     - user: root
     - group: root
     - mode: 644
+
+/etc/cron.d/salt-provisionnew:
+  file:
+    - managed
+    - source: salt://salt/config/etc/cron.d/salt-provisionnew
+    - user: root
+    - group: root
+    - mode: 644

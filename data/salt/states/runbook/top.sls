@@ -16,6 +16,7 @@ runbook:
     - certs.bridge
   '*control*':
     - runbook
+    - runbook.monitors.control
     - certs.monitors.control
   '*monitorbroker*':
     - runbook
