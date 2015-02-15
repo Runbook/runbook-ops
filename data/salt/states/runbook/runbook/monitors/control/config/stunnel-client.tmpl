@@ -1,0 +1,14 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+client = yes
+
+[redis-client]
+accept = 127.0.0.1:{{ redis['local_port'] }}
+connect = {{ hosts['redis'] }}:{{ redis['exposed_port'] }}
+
+[monitorbroker-client-{{ monitor_broker['local_control_port'] }}]
+accept = 127.0.0.1:{{ monitor_broker['local_control_port'] }}
+{% for host in hosts['monitor_broker'] %}
+connect = {{ host }}:{{ monitor_broker['exposed_control_port'] }}
+{% endfor %}
