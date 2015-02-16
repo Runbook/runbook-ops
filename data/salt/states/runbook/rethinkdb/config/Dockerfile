@@ -17,7 +17,7 @@ RUN \
 RUN apt-get install -y stunnel supervisor
 
 # Deploy Config files
-RUN mkdir -p /config /data/rethinkdb/instances/{{ instance }}
+RUN mkdir -p /config /data/rethinkdb/data/instances/{{ instance }}
 ADD config/supervisord.conf /config/supervisord.conf
 ADD config/rethink.conf /config/rethink.conf
 ADD config/stunnel-server.conf /config/stunnel-server.conf

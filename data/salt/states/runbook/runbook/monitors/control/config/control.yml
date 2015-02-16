@@ -1,0 +1,17 @@
+## Control Configuration
+stathat_ez_key: {{ stathat_ezkey }}
+envname: [{{ stathat_env }}]
+control_appname: {{ control['intervals'][interval]['appname'] }}
+sleep: {{ control['intervals'][interval]['sleep'] }}
+queue: {{ control['intervals'][interval]['queue'] }}
+zone: {{ control['zones'][general['datacenter']] }}
+## zMQ
+broker_ip: 127.0.0.1
+broker_control_port: {{ monitor_broker['local_control_port'] }}
+## Redis Config
+redis_host: 127.0.0.1
+redis_port: {{ redis['local_port'] }}
+redis_db: 0
+redis_password: {{ redis['pass'] }}
+## Logging
+use_syslog: False

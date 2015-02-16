@@ -1,0 +1,1 @@
+*/10 * * * * root /usr/bin/salt-ssh  '*' -i state.sls salt > /dev/null 2>&1

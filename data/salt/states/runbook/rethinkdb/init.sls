@@ -14,7 +14,7 @@ rethinkdb:
     - dead
     - enable: False
 
-/data/rethinkdb/data:
+/data/rethinkdb/data/instances/{{ pillar['rethink']['db'] }}:
   file.directory:
     - user: root
     - group: root
@@ -115,7 +115,7 @@ start-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] 
               -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" \
               -p "127.0.0.1:8080:8080" \
               -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" \
-              -v "/data/rethinkdb/data:/data/rethinkdb/instances/{{ pillar['rethink']['db'] }}" \
+              -v "/data/rethinkdb/data:/data/rethinkdb/data" \
               --name rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }} \
               rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
     - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}"

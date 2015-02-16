@@ -9,6 +9,8 @@ runbook:
     - redis
   '*control*':
     - runbook.monitors.broker
+    - runbook.monitors.control
+    - redis
   '*monitorbroker*':
     - runbook.monitors.broker
   '*worker*':

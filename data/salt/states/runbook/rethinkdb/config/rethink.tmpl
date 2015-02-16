@@ -1,4 +1,4 @@
-directory=/data/rethinkdb/instances/{{ dbpath }}
+directory=/data/rethinkdb/data/instances/{{ dbpath }}
 bind=all
 cluster-port={{ cluster_local_port }}
 driver-port=28115
@@ -8,4 +8,4 @@ driver-port=28115
 join=127.0.0.1:{{ port }}
 {% endif %}
 {% endfor %}
-server-name={{ server_name }}
+server-name={{ server_name|replace("-", "_") }}
