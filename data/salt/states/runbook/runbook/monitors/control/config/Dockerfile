@@ -24,14 +24,14 @@ RUN cp -R cloudroutes-service/src/monitors/* /code/
 
 # Copy Configurations
 RUN cp cloudroutes-service/src/monitors/requirements.txt /config/requirements.txt
-ADD config/control.yml /config/control.yml
 ADD config/stunnel-client.conf /config/stunnel-client.conf
-ADD config/supervisord.conf /config/supervisord.conf
+{% for queue,appdetails in control['intervals'].iteritems() %}
+ADD config/supervisord-{{ appdetails['appname'] }}.conf /config/supervisord-{{ appdetails['appname'] }}.conf
+ADD config/{{ appdetails['appname'] }}.yml /config/{{ appdetails['appname'] }}.yml
+{% endfor %}
 ADD config/ssl/key.pem /config/key.pem
 ADD config/ssl/cert.pem /config/cert.pem
 
 # Install requirements
 RUN pip install -r /config/requirements.txt
 
-# Command to run
-CMD /usr/bin/supervisord -c /config/supervisord.conf
