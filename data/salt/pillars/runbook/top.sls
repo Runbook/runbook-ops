@@ -23,3 +23,10 @@ runbook:
     - redis
     - mailchimp
     - mandrill
+  '*bridge*':
+    - runbook.actions.broker
+    - runbook.bridge
+    - rethinkdb
+    - redis
+    - mailchimp
+    - mandrill
