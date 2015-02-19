@@ -59,18 +59,28 @@
     - mode: 640
     - makedirs: True
 
+/data/runbook/bridge/config/mgmtrun.sh:
+  file.managed:
+    - source: salt://runbook/bridge/config/mgmtrun.sh
+    - user: root
+    - group: root
+    - mode: 750
+    - makedirs: True
+
 # Stop and Remove current container
 bridge-stop:
   cmd.wait:
     - name: /usr/bin/docker rm --force bridge
     - onlyif: /usr/bin/docker ps | /bin/grep -q "bridge"
     - order: 142
+    - stateful: False
     - watch:
       - git: runbook_source
       - file: /data/runbook/bridge/Dockerfile
       - file: /data/runbook/bridge/config/bridge.yml
       - file: /data/runbook/bridge/config/stunnel-client.conf
       - file: /data/runbook/bridge/config/supervisord.conf
+      - file: /data/runbook/bridge/config/mgmtrun.sh
       - file: /data/runbook/bridge/config/ssl
 
 # Build image
@@ -84,6 +94,7 @@ bridge:
       - file: /data/runbook/bridge/config/bridge.yml
       - file: /data/runbook/bridge/config/stunnel-client.conf
       - file: /data/runbook/bridge/config/supervisord.conf
+      - file: /data/runbook/bridge/config/mgmtrun.sh
       - file: /data/runbook/bridge/config/ssl
 
 # Start container if it is not running

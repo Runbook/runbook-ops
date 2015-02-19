@@ -26,6 +26,7 @@ runbook:
   '*bridge*':
     - runbook.actions.broker
     - runbook.bridge
+    - runbook.bridge.mgmt
     - rethinkdb
     - redis
     - mailchimp

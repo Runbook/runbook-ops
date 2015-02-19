@@ -27,8 +27,10 @@ RUN cp cloudroutes-service/src/bridge/requirements.txt /config/requirements.txt
 ADD config/bridge.yml /config/bridge.yml
 ADD config/stunnel-client.conf /config/stunnel-client.conf
 ADD config/supervisord.conf /config/supervisord.conf
+ADD config/supervisord-purge_history.conf /config/supervisord-purge_history.conf
 ADD config/ssl/key.pem /config/key.pem
 ADD config/ssl/cert.pem /config/cert.pem
+ADD config/mgmtrun.sh /code/mgmtrun.sh
 
 # Install requirements
 RUN pip install -r /config/requirements.txt
