@@ -68,6 +68,7 @@
     - name: /usr/bin/docker rm --force {{ appdetails['appname'] }}
     - onlyif: /usr/bin/docker ps | /bin/grep -q "{{ appdetails['appname'] }}"
     - order: 142
+    - stateful: False
     - watch:
       - git: runbook_source
       - file: /data/runbook/monitors/control/Dockerfile

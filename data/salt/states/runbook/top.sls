@@ -13,6 +13,7 @@ runbook:
     - runbook
   '*bridge*':
     - runbook
+    - runbook.bridge
     - certs.bridge
   '*control*':
     - runbook
