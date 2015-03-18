@@ -8,6 +8,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 # Install required packages
+RUN useradd -g users runapp
 RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
 RUN apt-get install -y libssl-dev libffi-dev git
 RUN apt-get install -y stunnel supervisor
@@ -31,6 +32,7 @@ ADD config/supervisord-purge_history.conf /config/supervisord-purge_history.conf
 ADD config/ssl/key.pem /config/key.pem
 ADD config/ssl/cert.pem /config/cert.pem
 ADD config/mgmtrun.sh /code/mgmtrun.sh
+RUN chown -R runapp:users /config /code
 
 # Install requirements
 RUN pip install -r /config/requirements.txt

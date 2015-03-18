@@ -1,4 +1,7 @@
 directory=/data/rethinkdb/data/instances/{{ dbpath }}
+canonical-address=127.0.0.1:{{ cluster_exposed_port }}
+canonical-address=127.0.0.1:{{ cluster_local_port }}
+cache-size=768
 bind=all
 cluster-port={{ cluster_local_port }}
 driver-port=28115

@@ -31,3 +31,9 @@ runbook:
     - redis
     - mailchimp
     - mandrill
+  '*web*':
+    - redis
+    - rethinkdb
+    - mailchimp
+    - mandrill
+    - runbook.web

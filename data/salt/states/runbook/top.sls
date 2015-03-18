@@ -11,6 +11,8 @@ runbook:
     - redis
   '*web*':
     - runbook
+    - runbook.web
+    - certs.web
   '*bridge*':
     - runbook
     - runbook.bridge
