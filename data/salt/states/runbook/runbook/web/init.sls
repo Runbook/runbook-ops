@@ -135,6 +135,9 @@ web-stop:
     - name: /usr/bin/docker rm --force web
     - onlyif: /usr/bin/docker ps | /bin/grep -q "web"
     - order: 142
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
       - git: runbook_source
       - file: /data/runbook/web/Dockerfile

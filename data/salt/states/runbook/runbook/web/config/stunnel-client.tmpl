@@ -2,6 +2,9 @@ cert = /config/cert.pem
 key = /config/key.pem
 foreground = yes
 client = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+TIMEOUTclose = 0
 
 [rethink-client]
 accept = 127.0.0.1:28015

@@ -24,6 +24,8 @@ RUN git clone https://github.com/asm-products/cloudroutes-service.git --branch {
 
 # Copy Code
 RUN cp -R cloudroutes-service/src/web/* /code/
+# Copy static files
+RUN cp -R cloudroutes-service/src/web/static /data/runstatic/public_html/
 
 # Copy Configurations
 RUN cp cloudroutes-service/src/web/requirements.txt /config/requirements.txt

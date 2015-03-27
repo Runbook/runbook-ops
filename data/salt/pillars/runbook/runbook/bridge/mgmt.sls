@@ -19,3 +19,8 @@ schedule:
     minutes: 60
     args:
       - /usr/bin/docker run --rm=True bridge /code/mgmtrun.sh /code/mgmtscripts/get_stats.py /config/bridge.yml
+  create_db:
+    function: cmd.run
+    minutes: 60 
+    args:
+      - /usr/bin/docker run --rm=True bridge /code/mgmtrun.sh /code/mgmtscripts/create_db.py --travis /config/bridge.yml
