@@ -153,8 +153,8 @@ web-stop:
 
 # Build image
 web:
-  docker.built:
-    - path: /data/runbook/web
+  cmd.wait:
+    - name: /usr/bin/docker build -t web /data/runbook/web
     - order: 143
     - watch:
       - cmd: web-stop
@@ -176,5 +176,3 @@ web-start:
               -p 443:8443 -p 80:8080 --name web web
     - unless: /usr/bin/docker ps | /bin/grep -q "web"
     - order: 144
-    - require:
-      - docker: web

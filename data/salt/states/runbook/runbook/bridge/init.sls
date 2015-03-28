@@ -85,8 +85,8 @@ bridge-stop:
 
 # Build image
 bridge:
-  docker.built:
-    - path: /data/runbook/bridge
+  cmd.wait:
+    - name: /usr/bin/docker build -t bridge /data/runbook/bridge
     - order: 143
     - watch:
       - cmd: bridge-stop
@@ -105,5 +105,3 @@ bridge-start:
               --name bridge bridge
     - unless: /usr/bin/docker ps | /bin/grep -q "bridge"
     - order: 144
-    - require:
-      - docker: bridge

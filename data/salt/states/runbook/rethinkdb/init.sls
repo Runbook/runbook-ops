@@ -97,9 +97,8 @@ rethinkdb-stop:
       - file: /data/rethinkdb/config/ssl
 
 rethinkdb-build:
-  docker.built:
-    - name: rethinkdb
-    - path: /data/rethinkdb
+  cmd.wait:
+    - name: /usr/bin/docker build -t rethinkdb /data/rethinkdb
     - order: 93
     - watch:
       - file: /data/rethinkdb/Dockerfile
@@ -121,5 +120,3 @@ start-rethinkdb:
               rethinkdb
     - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb"
     - order: 94
-    - require:
-      - docker: rethinkdb-build

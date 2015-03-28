@@ -64,9 +64,8 @@ redis-stop:
 
 # Build redis image
 redis-build:
-  docker.built:
-    - name: redis
-    - path: /data/redis
+  cmd.wait:
+    - name: /usr/bin/docker build -t redis /data/redis
     - order: 103
     - watch:
       - file: /data/redis/Dockerfile
@@ -84,5 +83,3 @@ redis-start:
               redis
     - unless: /usr/bin/docker ps | /bin/grep redis
     - order: 104
-    - require:
-      - docker: redis-build

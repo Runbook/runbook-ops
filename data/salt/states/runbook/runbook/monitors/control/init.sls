@@ -86,16 +86,13 @@
               /usr/bin/supervisord -c /config/supervisord-{{ appdetails['appname'] }}.conf
     - unless: /usr/bin/docker ps | /bin/grep -q "{{ appdetails['appname'] }}"
     - order: 144
-    - require:
-      - docker: control
 
 {% endfor %}
 
 # Build image
 control:
-  docker.built:
-    - path: /data/runbook/monitors/control
-    - nocache: True
+  cmd.wait:
+    - name: /usr/bin/docker build -t control /data/runbook/monitors/control
     - order: 143
     - watch:
       - git: runbook_source
