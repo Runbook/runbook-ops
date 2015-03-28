@@ -80,8 +80,8 @@ actionbroker-stop:
 
 # Build image
 actionbroker:
-  docker.built:
-    - path: /data/runbook/actions/broker
+  cmd.wait:
+    - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
     - order: 123
     - watch:
       - cmd: actionbroker-stop
@@ -100,5 +100,3 @@ actionbroker-start:
               --name actionbroker actionbroker
     - unless: /usr/bin/docker ps | /bin/grep -q "actionbroker"
     - order: 124
-    - require:
-      - docker: actionbroker

@@ -2,6 +2,9 @@ cert = /config/cert.pem
 key = /config/key.pem
 foreground = yes
 client = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+TIMEOUTclose = 0
 
 {% for host, port in rethink_cluster.iteritems() %}
 {% if port != cluster_exposed_port %}

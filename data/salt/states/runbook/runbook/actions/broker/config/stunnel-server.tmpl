@@ -1,6 +1,10 @@
 cert = /config/cert.pem
 key = /config/key.pem
 foreground = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+TIMEOUTclose = 0
+
 
 [broker-{{ exposed_actioner_port }}]
 accept = 0.0.0.0:{{ exposed_actioner_port }}

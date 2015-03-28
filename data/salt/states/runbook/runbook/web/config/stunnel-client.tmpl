@@ -6,13 +6,12 @@ socket = l:TCP_NODELAY=1
 socket = r:TCP_NODELAY=1
 TIMEOUTclose = 0
 
+[rethink-client]
+accept = 127.0.0.1:28015
+{% for host, port in rethink['cluster'].iteritems() %}
+connect = {{ host }}:28015
+{% endfor %}
 
 [redis-client]
 accept = 127.0.0.1:{{ redis['local_port'] }}
 connect = {{ hosts['redis'] }}:{{ redis['exposed_port'] }}
-
-[monitorbroker-client-{{ monitor_broker['local_control_port'] }}]
-accept = 127.0.0.1:{{ monitor_broker['local_control_port'] }}
-{% for host in hosts['monitor_broker'] %}
-connect = {{ host }}:{{ monitor_broker['exposed_control_port'] }}
-{% endfor %}

@@ -72,10 +72,8 @@
     - watch:
       - git: runbook_source
       - file: /data/runbook/monitors/control/Dockerfile
-{% for queue2,appdetails2 in pillar['control']['intervals'].iteritems() %}
-      - file: /data/runbook/monitors/control/config/{{ appdetails2['appname'] }}.yml
-      - file: /data/runbook/monitors/control/config/supervisord-{{ appdetails2['appname'] }}.conf
-{% endfor %}
+      - file: /data/runbook/monitors/control/config/{{ appdetails['appname'] }}.yml
+      - file: /data/runbook/monitors/control/config/supervisord-{{ appdetails['appname'] }}.conf
       - file: /data/runbook/monitors/control/config/stunnel-client.conf
       - file: /data/runbook/monitors/control/config/ssl
 
@@ -88,23 +86,23 @@
               /usr/bin/supervisord -c /config/supervisord-{{ appdetails['appname'] }}.conf
     - unless: /usr/bin/docker ps | /bin/grep -q "{{ appdetails['appname'] }}"
     - order: 144
-    - require:
-      - docker: control
 
 {% endfor %}
 
 # Build image
 control:
-  docker.built:
-    - path: /data/runbook/monitors/control
+  cmd.wait:
+    - name: /usr/bin/docker build -t control /data/runbook/monitors/control
     - order: 143
     - watch:
+      - git: runbook_source
 {% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
-      - cmd: {{ appdetails['appname'] }}-stop
       - file: /data/runbook/monitors/control/config/{{ appdetails['appname'] }}.yml
       - file: /data/runbook/monitors/control/config/supervisord-{{ appdetails['appname'] }}.conf
 {% endfor %}
       - file: /data/runbook/monitors/control/Dockerfile
       - file: /data/runbook/monitors/control/config/stunnel-client.conf
       - file: /data/runbook/monitors/control/config/ssl
+
+
 

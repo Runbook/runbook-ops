@@ -1,6 +1,9 @@
 cert = /config/cert.pem
 key = /config/key.pem
 foreground = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+TIMEOUTclose = 0
 
 [rethink-{{ cluster_exposed_port }}]
 accept = 0.0.0.0:{{ cluster_exposed_port }}

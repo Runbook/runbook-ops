@@ -79,8 +79,8 @@ actioner-stop:
 
 # Build image
 actioner:
-  docker.built:
-    - path: /data/runbook/actions/actioner
+  cmd.wait:
+    - name: /usr/bin/docker build -t actioner /data/runbook/actions/actioner
     - order: 143
     - watch:
       - cmd: actioner-stop
@@ -98,5 +98,3 @@ actioner-start:
               --name actioner actioner
     - unless: /usr/bin/docker ps | /bin/grep -q "actioner"
     - order: 144
-    - require:
-      - docker: actioner

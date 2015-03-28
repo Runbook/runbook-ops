@@ -50,7 +50,7 @@
       local_port: {{ pillar['redis']['local_port'] }}
 
 # Stop and Remove current redis container
-redis-{{ pillar['redis']['local_port'] }}-stop:
+redis-stop:
   cmd.wait:
     - name: /usr/bin/docker rm --force --volumes=false redis-{{ pillar['redis']['local_port'] }}
     - onlyif: /usr/bin/docker ps | /bin/grep -q "redis-{{ pillar['redis']['local_port'] }}"
@@ -63,9 +63,9 @@ redis-{{ pillar['redis']['local_port'] }}-stop:
       - file: /data/redis/config/ssl
 
 # Build redis image
-redis-{{ pillar['redis']['local_port'] }}:
-  docker.built:
-    - path: /data/redis
+redis-build:
+  cmd.wait:
+    - name: /usr/bin/docker build -t redis /data/redis
     - order: 103
     - watch:
       - file: /data/redis/Dockerfile
@@ -75,13 +75,11 @@ redis-{{ pillar['redis']['local_port'] }}:
       - file: /data/redis/config/ssl
 
 # Start redis container if it is not running
-redis-{{ pillar['redis']['local_port'] }}-start:
+redis-start:
   cmd.run:
     - name: |
               /usr/bin/docker run -d -p "{{ pillar['redis']['exposed_port'] }}:{{ pillar['redis']['exposed_port'] }}" \
-              -v "/data/redis:/data/redis" --name "redis-{{ pillar['redis']['local_port'] }}" \
-              redis-{{ pillar['redis']['local_port'] }}
-    - unless: /usr/bin/docker ps | /bin/grep redis-{{ pillar['redis']['local_port'] }}
+              -v "/data/redis:/data/redis" --name "redis" \
+              redis
+    - unless: /usr/bin/docker ps | /bin/grep redis
     - order: 104
-    - require:
-      - docker: redis-{{ pillar['redis']['local_port'] }}

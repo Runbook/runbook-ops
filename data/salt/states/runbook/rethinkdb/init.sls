@@ -83,10 +83,10 @@ rethinkdb:
       instance: {{ pillar['rethink']['db'] }}
 
 
-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}-stop:
+rethinkdb-stop:
   cmd.wait:
-    - name: /usr/bin/docker rm --force --volumes=false rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
-    - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}"
+    - name: /usr/bin/docker rm --force --volumes=false rethinkdb
+    - onlyif: /usr/bin/docker ps | /bin/grep -q "rethinkdb"
     - order: 91
     - watch:
       - file: /data/rethinkdb/Dockerfile
@@ -96,9 +96,9 @@ rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}-sto
       - file: /data/rethinkdb/config/supervisord.conf
       - file: /data/rethinkdb/config/ssl
 
-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:
-  docker.built:
-    - path: /data/rethinkdb
+rethinkdb-build:
+  cmd.wait:
+    - name: /usr/bin/docker build -t rethinkdb /data/rethinkdb
     - order: 93
     - watch:
       - file: /data/rethinkdb/Dockerfile
@@ -108,7 +108,7 @@ rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:
       - file: /data/rethinkdb/config/supervisord.conf
       - file: /data/rethinkdb/config/ssl
 
-start-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:
+start-rethinkdb:
   cmd.run:
     - name: |
               /usr/bin/docker run -d -p "28015:28015" \
@@ -116,9 +116,7 @@ start-rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] 
               -p "127.0.0.1:8080:8080" \
               -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" \
               -v "/data/rethinkdb/data:/data/rethinkdb/data" \
-              --name rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }} \
-              rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}
-    - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}"
+              --name rethinkdb \
+              rethinkdb
+    - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb"
     - order: 94
-    - require:
-      - docker: rethinkdb-{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}

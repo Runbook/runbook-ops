@@ -73,8 +73,8 @@ monitorbroker-stop:
 
 # Build image
 monitorbroker:
-  docker.built:
-    - path: /data/runbook/monitors/broker
+  cmd.wait:
+    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
     - order: 113
     - watch:
       - cmd: monitorbroker-stop
@@ -93,5 +93,3 @@ monitorbroker-start:
               --name monitorbroker monitorbroker
     - unless: /usr/bin/docker ps | /bin/grep -q "monitorbroker"
     - order: 114
-    - require:
-      - docker: monitorbroker
