@@ -82,27 +82,30 @@
   cmd.run:
     - name: |
               /usr/bin/docker run -d \
-              --name {{ appdetails['appname'] }} {{ appdetails['appname'] }} \
+              --name {{ appdetails['appname'] }} control \
               /usr/bin/supervisord -c /config/supervisord-{{ appdetails['appname'] }}.conf
     - unless: /usr/bin/docker ps | /bin/grep -q "{{ appdetails['appname'] }}"
     - order: 144
     - require:
-      - docker: {{ appdetails['appname'] }}
+      - docker: control
+
+{% endfor %}
 
 # Build image
-{{ appdetails['appname'] }}:
+control:
   docker.built:
     - path: /data/runbook/monitors/control
     - nocache: True
     - order: 143
     - watch:
-      - cmd: {{ appdetails['appname'] }}-stop
+      - git: runbook_source
+{% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
       - file: /data/runbook/monitors/control/config/{{ appdetails['appname'] }}.yml
       - file: /data/runbook/monitors/control/config/supervisord-{{ appdetails['appname'] }}.conf
+{% endfor %}
       - file: /data/runbook/monitors/control/Dockerfile
       - file: /data/runbook/monitors/control/config/stunnel-client.conf
       - file: /data/runbook/monitors/control/config/ssl
 
-{% endfor %}
 
 
