@@ -76,7 +76,11 @@ monitorbroker:
   cmd.wait:
     - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
     - order: 113
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
+      - git: runbook_source
       - cmd: monitorbroker-stop
       - file: /data/runbook/monitors/broker/Dockerfile
       - file: /data/runbook/monitors/broker/config/broker.yml
@@ -84,12 +88,36 @@ monitorbroker:
       - file: /data/runbook/monitors/broker/config/supervisord.conf
       - file: /data/runbook/monitors/broker/config/ssl
 
-# Start container if it is not running
-monitorbroker-start:
+## Build if image isn't present
+monitorbroker-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d -p "{{ pillar['monitor_broker']['exposed_control_port'] }}:{{ pillar['monitor_broker']['exposed_control_port'] }}" \
-              -p "{{ pillar['monitor_broker']['exposed_worker_port'] }}:{{ pillar['monitor_broker']['exposed_worker_port'] }}" \
-              --name monitorbroker monitorbroker
-    - unless: /usr/bin/docker ps | /bin/grep -q "monitorbroker"
-    - order: 114
+    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
+    - unless: /usr/bin/docker images | grep -q "monitorbroker"
+    - require:
+      - git: runbook_source
+      - cmd: monitorbroker-stop
+      - file: /data/runbook/monitors/broker/Dockerfile
+      - file: /data/runbook/monitors/broker/config/broker.yml
+      - file: /data/runbook/monitors/broker/config/stunnel-server.conf
+      - file: /data/runbook/monitors/broker/config/supervisord.conf
+      - file: /data/runbook/monitors/broker/config/ssl
+
+/etc/supervisor/conf.d/monitorbroker.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: monitorbroker
+        docker_args: -p "{{ pillar['monitor_broker']['exposed_control_port'] }}:{{ pillar['monitor_broker']['exposed_control_port'] }}" -p "{{ pillar['monitor_broker']['exposed_worker_port'] }}:{{ pillar['monitor_broker']['exposed_worker_port'] }}" --name monitorbroker monitorbroker
+
+supervisor-monitorbroker:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/monitorbroker.conf

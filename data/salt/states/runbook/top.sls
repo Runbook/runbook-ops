@@ -1,6 +1,7 @@
 runbook:
   '*':
     - certs
+    - supervisor
   '*rethinkdb*':
     - appusers.rethinkdb
     - appgroups.rethinkdb
@@ -36,4 +37,24 @@ runbook:
     - runbook
     - runbook.actions.broker
     - certs.actions.broker
-
+  '*all*':
+    - runbook
+    - appusers.rethinkdb
+    - appgroups.rethinkdb
+    - certs.rethink
+    - rethinkdb
+    - certs.redis
+    - redis
+    - runbook.web
+    - certs.web
+    - runbook.bridge
+    - certs.bridge
+    - runbook.monitors.control
+    - certs.monitors.control
+    - runbook.monitors.broker
+    - certs.monitors.broker
+    - certs.monitors.worker
+    - runbook.actions.actioner
+    - certs.actions.actioner
+    - runbook.actions.broker
+    - certs.actions.broker

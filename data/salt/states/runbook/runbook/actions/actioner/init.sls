@@ -82,7 +82,11 @@ actioner:
   cmd.wait:
     - name: /usr/bin/docker build -t actioner /data/runbook/actions/actioner
     - order: 143
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
+      - git: runbook_source
       - cmd: actioner-stop
       - file: /data/runbook/actions/actioner/Dockerfile
       - file: /data/runbook/actions/actioner/config/actioner.yml
@@ -90,11 +94,35 @@ actioner:
       - file: /data/runbook/actions/actioner/config/supervisord.conf
       - file: /data/runbook/actions/actioner/config/ssl
 
-# Start container if it is not running
-actioner-start:
+## Build if image isn't present
+actioner-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d \
-              --name actioner actioner
-    - unless: /usr/bin/docker ps | /bin/grep -q "actioner"
-    - order: 144
+    - name: /usr/bin/docker build -t actioner /data/runbook/actions/actioner
+    - unless: /usr/bin/docker images | grep -q "actioner"
+    - require:
+      - git: runbook_source
+      - file: /data/runbook/actions/actioner/Dockerfile
+      - file: /data/runbook/actions/actioner/config/actioner.yml
+      - file: /data/runbook/actions/actioner/config/stunnel-client.conf
+      - file: /data/runbook/actions/actioner/config/supervisord.conf
+      - file: /data/runbook/actions/actioner/config/ssl
+
+/etc/supervisor/conf.d/actioner.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: actioner
+        docker_args: --name actioner actioner
+
+supervisor-actioner:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/actioner.conf

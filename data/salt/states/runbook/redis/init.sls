@@ -52,8 +52,8 @@
 # Stop and Remove current redis container
 redis-stop:
   cmd.wait:
-    - name: /usr/bin/docker rm --force --volumes=false redis-{{ pillar['redis']['local_port'] }}
-    - onlyif: /usr/bin/docker ps | /bin/grep -q "redis-{{ pillar['redis']['local_port'] }}"
+    - name: /usr/bin/docker rm --force --volumes=false redis
+    - onlyif: /usr/bin/docker ps | /bin/grep -q "redis"
     - order: 102
     - watch:
       - file: /data/redis/Dockerfile
@@ -65,8 +65,11 @@ redis-stop:
 # Build redis image
 redis-build:
   cmd.wait:
-    - name: /usr/bin/docker build -t redis /data/redis
+    - name: /usr/bin/docker build -t runbook-redis /data/redis
     - order: 103
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
       - file: /data/redis/Dockerfile
       - file: /data/redis/config/redis.conf
@@ -74,12 +77,34 @@ redis-build:
       - file: /data/redis/config/supervisord.conf
       - file: /data/redis/config/ssl
 
-# Start redis container if it is not running
-redis-start:
+## Build if image isn't present
+redis-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d -p "{{ pillar['redis']['exposed_port'] }}:{{ pillar['redis']['exposed_port'] }}" \
-              -v "/data/redis:/data/redis" --name "redis" \
-              redis
-    - unless: /usr/bin/docker ps | /bin/grep redis
-    - order: 104
+    - name: /usr/bin/docker build -t runbook-redis /data/redis
+    - unless: /usr/bin/docker images | grep -q "runbook-redis"
+    - require:
+      - file: /data/redis/Dockerfile
+      - file: /data/redis/config/redis.conf
+      - file: /data/redis/config/stunnel-server.conf
+      - file: /data/redis/config/supervisord.conf
+      - file: /data/redis/config/ssl
+
+/etc/supervisor/conf.d/redis.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: redis
+        docker_args: -p "{{ pillar['redis']['exposed_port'] }}:{{ pillar['redis']['exposed_port'] }}" -v "/data/redis:/data/redis" --name "redis" runbook-redis
+
+supervisor-redis:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/redis.conf

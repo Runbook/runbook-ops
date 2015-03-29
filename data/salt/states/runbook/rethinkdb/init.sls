@@ -98,8 +98,11 @@ rethinkdb-stop:
 
 rethinkdb-build:
   cmd.wait:
-    - name: /usr/bin/docker build -t rethinkdb /data/rethinkdb
+    - name: /usr/bin/docker build -t runbook-rethinkdb /data/rethinkdb
     - order: 93
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
       - file: /data/rethinkdb/Dockerfile
       - file: /data/rethinkdb/config/rethink.conf
@@ -108,15 +111,35 @@ rethinkdb-build:
       - file: /data/rethinkdb/config/supervisord.conf
       - file: /data/rethinkdb/config/ssl
 
-start-rethinkdb:
+## Build if image isn't present
+rethinkdb-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d -p "28015:28015" \
-              -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" \
-              -p "127.0.0.1:8080:8080" \
-              -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" \
-              -v "/data/rethinkdb/data:/data/rethinkdb/data" \
-              --name rethinkdb \
-              rethinkdb
-    - unless:  /usr/bin/docker ps | /bin/grep -q "rethinkdb"
-    - order: 94
+    - name: /usr/bin/docker build -t runbook-rethinkdb /data/rethinkdb
+    - unless: /usr/bin/docker images | grep -q "rethinkdb"
+    - require:
+      - file: /data/rethinkdb/Dockerfile
+      - file: /data/rethinkdb/config/rethink.conf
+      - file: /data/rethinkdb/config/stunnel-client.conf
+      - file: /data/rethinkdb/config/stunnel-server.conf
+      - file: /data/rethinkdb/config/supervisord.conf
+      - file: /data/rethinkdb/config/ssl
+
+/etc/supervisor/conf.d/rethinkdb.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: rethinkdb
+        docker_args: -p "28015:28015" -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" -p "127.0.0.1:8080:8080" -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" -v "/data/rethinkdb/data:/data/rethinkdb/data" --name rethinkdb runbook-rethinkdb
+
+supervisor-rethinkdb:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/rethinkdb.conf

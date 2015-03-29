@@ -156,7 +156,11 @@ web:
   cmd.wait:
     - name: /usr/bin/docker build -t web /data/runbook/web
     - order: 143
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
+      - git: runbook_source
       - cmd: web-stop
       - file: /data/runbook/web/Dockerfile
       - file: /data/runbook/web/config/web.cfg
@@ -168,11 +172,40 @@ web:
       - file: /data/runbook/web/config/nginx/sites-enabled/dash.cloudrout.es.conf
       - file: /data/runbook/web/config/nginx/sites-enabled/cloudrout.es.conf
 
-# Start container if it is not running
-web-start:
+## Build if image isn't present
+web-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d \
-              -p 443:8443 -p 80:8080 --name web web
-    - unless: /usr/bin/docker ps | /bin/grep -q "web"
-    - order: 144
+    - name: /usr/bin/docker build -t web /data/runbook/web
+    - unless: /usr/bin/docker images | grep -q "web"
+    - require:
+      - git: runbook_source
+      - cmd: web-stop
+      - file: /data/runbook/web/Dockerfile
+      - file: /data/runbook/web/config/web.cfg
+      - file: /data/runbook/web/config/stunnel-client.conf
+      - file: /data/runbook/web/config/supervisord.conf
+      - file: /data/runbook/web/config/ssl
+      - file: /data/runbook/web/config/nginx/sites-enabled/dash.runbook.io.conf
+      - file: /data/runbook/web/config/nginx/sites-enabled/runbook.io.conf
+      - file: /data/runbook/web/config/nginx/sites-enabled/dash.cloudrout.es.conf
+      - file: /data/runbook/web/config/nginx/sites-enabled/cloudrout.es.conf
+
+/etc/supervisor/conf.d/web.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: web
+        docker_args: -p 443:8443 -p 80:8080  --name web web
+
+supervisor-web:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/web.conf

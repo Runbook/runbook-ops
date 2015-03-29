@@ -83,7 +83,11 @@ actionbroker:
   cmd.wait:
     - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
     - order: 123
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
+      - git: runbook_source
       - cmd: actionbroker-stop
       - file: /data/runbook/actions/broker/Dockerfile
       - file: /data/runbook/actions/broker/config/broker.yml
@@ -91,12 +95,35 @@ actionbroker:
       - file: /data/runbook/actions/broker/config/supervisord.conf
       - file: /data/runbook/actions/broker/config/ssl
 
-# Start container if it is not running
-actionbroker-start:
+## Build if image isn't present
+actionbroker-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d -p "{{ pillar['action_broker']['exposed_sink_port'] }}:{{ pillar['action_broker']['exposed_sink_port'] }}" \
-              -p "{{ pillar['action_broker']['exposed_actioner_port'] }}:{{ pillar['action_broker']['exposed_actioner_port'] }}" \
-              --name actionbroker actionbroker
-    - unless: /usr/bin/docker ps | /bin/grep -q "actionbroker"
-    - order: 124
+    - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
+    - unless: /usr/bin/docker images | grep -q "actionbroker"
+    - require:
+      - cmd: actionbroker-stop
+      - file: /data/runbook/actions/broker/Dockerfile
+      - file: /data/runbook/actions/broker/config/broker.yml
+      - file: /data/runbook/actions/broker/config/stunnel-server.conf
+      - file: /data/runbook/actions/broker/config/supervisord.conf
+      - file: /data/runbook/actions/broker/config/ssl
+
+/etc/supervisor/conf.d/actionbroker.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: actionbroker
+        docker_args: -p "{{ pillar['action_broker']['exposed_sink_port'] }}:{{ pillar['action_broker']['exposed_sink_port'] }}" -p "{{ pillar['action_broker']['exposed_actioner_port'] }}:{{ pillar['action_broker']['exposed_actioner_port'] }}" --name actionbroker actionbroker
+
+supervisor-actionbroker:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/actionbroker.conf

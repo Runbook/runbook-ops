@@ -77,15 +77,20 @@
       - file: /data/runbook/monitors/control/config/stunnel-client.conf
       - file: /data/runbook/monitors/control/config/ssl
 
-# Start container if it is not running
-{{ appdetails['appname'] }}-start:
-  cmd.run:
-    - name: |
-              /usr/bin/docker run -d \
-              --name {{ appdetails['appname'] }} control \
-              /usr/bin/supervisord -c /config/supervisord-{{ appdetails['appname'] }}.conf
-    - unless: /usr/bin/docker ps | /bin/grep -q "{{ appdetails['appname'] }}"
-    - order: 144
+/etc/supervisor/conf.d/{{ appdetails['appname'] }}.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: {{ appdetails['appname'] }}
+        docker_args: --name {{ appdetails['appname'] }} control /usr/bin/supervisord -c /config/supervisord-{{ appdetails['appname'] }}.conf
+
 
 {% endfor %}
 
@@ -94,6 +99,9 @@ control:
   cmd.wait:
     - name: /usr/bin/docker build -t control /data/runbook/monitors/control
     - order: 143
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
       - git: runbook_source
 {% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
@@ -105,4 +113,26 @@ control:
       - file: /data/runbook/monitors/control/config/ssl
 
 
+## Build if image isn't present
+monitorbroker-build2:
+  cmd.run:
+    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
+    - unless: /usr/bin/docker images | grep -q "monitorbroker"
+    - require:
+      - git: runbook_source
+{% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
+      - file: /data/runbook/monitors/control/config/{{ appdetails['appname'] }}.yml
+      - file: /data/runbook/monitors/control/config/supervisord-{{ appdetails['appname'] }}.conf
+{% endfor %}
+      - file: /data/runbook/monitors/control/Dockerfile
+      - file: /data/runbook/monitors/control/config/stunnel-client.conf
+      - file: /data/runbook/monitors/control/config/ssl
+      
 
+supervisor-control:
+  service.running:
+    - name: supervisor
+    - watch:
+{% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
+      - file: /etc/supervisor/conf.d/{{ appdetails['appname'] }}.conf
+{% endfor %}
