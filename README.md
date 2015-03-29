@@ -16,7 +16,9 @@ Developer and User docs can be found in the [docs](docs/) directory and on [Read
 
 This repository contains configurations and scripts necessary for running Runbooks production environment. If you are looking for the code that runs Runbook check out our main [repository](https://github.com/asm-products/cloudroutes-service).
 
-This repo is not designed to be self sufficent, some files which contain sensitive data are purposly ommited.
+This repo is designed to be self sufficent development environment, all sensitive information has been scrubbed and is kept in a secret repository.
 
 **Important Files:**
 * `data/salt` - Saltstack states/pillars/reactor configurations
+* `Vagrantfile` - Vagrant file for launching a development environment
+* `server.yml` - YAML configuration file containing development vagrant servers
