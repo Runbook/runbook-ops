@@ -88,7 +88,11 @@ bridge:
   cmd.wait:
     - name: /usr/bin/docker build -t bridge /data/runbook/bridge
     - order: 143
+    - require:
+      - pkg: docker.io
+      - service: docker.io
     - watch:
+      - git: runbook_source
       - cmd: bridge-stop
       - file: /data/runbook/bridge/Dockerfile
       - file: /data/runbook/bridge/config/bridge.yml
@@ -97,11 +101,37 @@ bridge:
       - file: /data/runbook/bridge/config/mgmtrun.sh
       - file: /data/runbook/bridge/config/ssl
 
-# Start container if it is not running
-bridge-start:
+## Build if image isn't present
+bridge-build2:
   cmd.run:
-    - name: |
-              /usr/bin/docker run -d \
-              --name bridge bridge
-    - unless: /usr/bin/docker ps | /bin/grep -q "bridge"
-    - order: 144
+    - name: /usr/bin/docker build -t bridge /data/runbook/bridge
+    - unless: /usr/bin/docker images | grep -q "bridge"
+    - require:
+      - git: runbook_source
+      - cmd: bridge-stop
+      - file: /data/runbook/bridge/Dockerfile
+      - file: /data/runbook/bridge/config/bridge.yml
+      - file: /data/runbook/bridge/config/stunnel-client.conf
+      - file: /data/runbook/bridge/config/supervisord.conf
+      - file: /data/runbook/bridge/config/mgmtrun.sh
+      - file: /data/runbook/bridge/config/ssl
+
+/etc/supervisor/conf.d/bridge.conf:
+  file.managed:
+    - source: salt://supervisor/config/supervisord.tmpl
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: supervisor
+    - template: jinja
+    - context:
+      container:
+        name: bridge
+        docker_args: --name bridge bridge
+
+supervisor-bridge:
+  service.running:
+    - name: supervisor
+    - watch:
+      - file: /etc/supervisor/conf.d/bridge.conf
