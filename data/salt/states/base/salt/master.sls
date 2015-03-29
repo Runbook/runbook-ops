@@ -20,6 +20,9 @@ salt-api:
     - user: root
     - group: root
     - mode: 644
+    - template: jinja
+    - context:
+      saltapi: {{ pillar['saltapi'] }}
 {% endfor %}
 
 
