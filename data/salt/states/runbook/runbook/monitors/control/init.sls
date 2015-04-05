@@ -114,10 +114,10 @@ control:
 
 
 ## Build if image isn't present
-monitorbroker-build2:
+control-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
-    - unless: /usr/bin/docker images | grep -q "monitorbroker"
+    - name: /usr/bin/docker build -t control /data/runbook/monitors/control
+    - unless: /usr/bin/docker images | grep -q "control"
     - require:
       - git: runbook_source
 {% for queue,appdetails in pillar['control']['intervals'].iteritems() %}
