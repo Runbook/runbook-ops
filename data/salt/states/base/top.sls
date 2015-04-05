@@ -26,3 +26,5 @@ base:
     - wget
   'salt*':
     - salt.master
+  'all*':
+    - salt.master
