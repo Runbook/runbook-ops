@@ -80,7 +80,7 @@ actioner-stop:
 # Build image
 actioner:
   cmd.wait:
-    - name: /usr/bin/docker kill actioner; /usr/bin/docker rmi --force; /usr/bin/docker build -t actioner /data/runbook/actions/actioner
+    - name: /usr/bin/docker kill actioner; /usr/bin/docker rmi --force actioner; /usr/bin/docker build -t actioner /data/runbook/actions/actioner
     - order: 143
     - require:
       - pkg: docker.io

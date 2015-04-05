@@ -154,7 +154,7 @@ web-stop:
 # Build image
 web:
   cmd.wait:
-    - name: /usr/bin/docker kill web; /usr/bin/docker rmi --force; /usr/bin/docker build -t web /data/runbook/web
+    - name: /usr/bin/docker kill web; /usr/bin/docker rmi --force web; /usr/bin/docker build -t web /data/runbook/web
     - order: 143
     - require:
       - pkg: docker.io
