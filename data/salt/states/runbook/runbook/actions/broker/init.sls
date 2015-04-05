@@ -81,7 +81,7 @@ actionbroker-stop:
 # Build image
 actionbroker:
   cmd.wait:
-    - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
+    - name: /usr/bin/docker kill actionbroker; /usr/bin/docker rmi --force actionbroker; /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
     - order: 123
     - require:
       - pkg: docker.io
