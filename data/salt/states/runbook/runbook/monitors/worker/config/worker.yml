@@ -1,0 +1,12 @@
+## Worker Configuration
+## zMQ
+broker_ip: 127.0.0.1
+broker_worker_port: {{ monitor_broker['local_worker_port'] }}
+## StatHat EZ Key
+stathat_key: {{ stathat_ezkey }}
+envname: [{{ stathat_env }}]
+## Sink Config
+sink_ip: 127.0.0.1
+sink_port: {{ action_broker['local_sink_port'] }}
+## Logging
+use_syslog: False
