@@ -30,6 +30,7 @@
     - context:
       monitor_broker: {{ pillar['monitor_broker'] }}
       action_broker: {{ pillar['action_broker'] }}
+      hosts: {{ pillar['hosts'] }}
 
 
 /data/runbook/monitors/worker/Dockerfile:
@@ -61,14 +62,14 @@ monitorworker-stop:
       - git: runbook_source
       - file: /data/runbook/monitors/worker/Dockerfile
       - file: /data/runbook/monitors/worker/config/worker.yml
-      - file: /data/runbook/monitors/worker/config/stunnel-server.conf
+      - file: /data/runbook/monitors/worker/config/stunnel-client.conf
       - file: /data/runbook/monitors/worker/config/supervisord.conf
       - file: /data/runbook/monitors/worker/config/ssl
 
 # Build image
 monitorworker:
   cmd.wait:
-    - name: /usr/bin/docker build -t monitorworker /data/runbook/monitors/worker
+    - name: /usr/bin/docker kill monitorworker; /usr/bin/docker rmi --force monitorworker; /usr/bin/docker build -t monitorworker /data/runbook/monitors/worker
     - order: 113
     - require:
       - pkg: docker.io
@@ -78,7 +79,7 @@ monitorworker:
       - cmd: monitorworker-stop
       - file: /data/runbook/monitors/worker/Dockerfile
       - file: /data/runbook/monitors/worker/config/worker.yml
-      - file: /data/runbook/monitors/worker/config/stunnel-server.conf
+      - file: /data/runbook/monitors/worker/config/stunnel-client.conf
       - file: /data/runbook/monitors/worker/config/supervisord.conf
       - file: /data/runbook/monitors/worker/config/ssl
 
@@ -92,7 +93,7 @@ monitorworker-build2:
       - cmd: monitorworker-stop
       - file: /data/runbook/monitors/worker/Dockerfile
       - file: /data/runbook/monitors/worker/config/worker.yml
-      - file: /data/runbook/monitors/worker/config/stunnel-server.conf
+      - file: /data/runbook/monitors/worker/config/stunnel-client.conf
       - file: /data/runbook/monitors/worker/config/supervisord.conf
       - file: /data/runbook/monitors/worker/config/ssl
 
