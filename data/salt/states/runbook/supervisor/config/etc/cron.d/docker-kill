@@ -1,0 +1,1 @@
+* * * * * root /root/scripts/docker-kill.sh 2>&1 > /dev/null
