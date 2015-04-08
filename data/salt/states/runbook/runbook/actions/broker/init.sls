@@ -36,9 +36,9 @@
     - template: jinja
     - context:
       exposed_sink_port: {{ pillar['action_broker']['exposed_sink_port'] }}
-      local_sink_port: {{ pillar['action_broker']['exposed_sink_port'] }}
+      local_sink_port: {{ pillar['action_broker']['local_sink_port'] }}
       exposed_actioner_port: {{ pillar['action_broker']['exposed_actioner_port'] }}
-      local_actioner_port: {{ pillar['action_broker']['exposed_actioner_port'] }}
+      local_actioner_port: {{ pillar['action_broker']['local_actioner_port'] }}
 
 
 /data/runbook/actions/broker/Dockerfile:
@@ -51,9 +51,9 @@
     - template: jinja
     - context:
       exposed_sink_port: {{ pillar['action_broker']['exposed_sink_port'] }}
-      local_sink_port: {{ pillar['action_broker']['exposed_sink_port'] }}
+      local_sink_port: {{ pillar['action_broker']['local_sink_port'] }}
       exposed_actioner_port: {{ pillar['action_broker']['exposed_actioner_port'] }}
-      local_actioner_port: {{ pillar['action_broker']['exposed_actioner_port'] }}
+      local_actioner_port: {{ pillar['action_broker']['local_actioner_port'] }}
       git_branch: {{ pillar['git_branch'] }}
 
 /data/runbook/actions/broker/config/supervisord.conf:
