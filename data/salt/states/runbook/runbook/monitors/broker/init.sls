@@ -29,9 +29,9 @@
     - template: jinja
     - context:
       exposed_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
-      local_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
+      local_control_port: {{ pillar['monitor_broker']['local_control_port'] }}
       exposed_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
-      local_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
+      local_worker_port: {{ pillar['monitor_broker']['local_worker_port'] }}
 
 
 /data/runbook/monitors/broker/Dockerfile:
@@ -44,9 +44,9 @@
     - template: jinja
     - context:
       exposed_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
-      local_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
+      local_control_port: {{ pillar['monitor_broker']['local_control_port'] }}
       exposed_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
-      local_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
+      local_worker_port: {{ pillar['monitor_broker']['local_worker_port'] }}
       git_branch: {{ pillar['git_branch'] }}
 
 /data/runbook/monitors/broker/config/supervisord.conf:
