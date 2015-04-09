@@ -7,10 +7,10 @@ socket = r:TCP_NODELAY=1
 TIMEOUTclose = 0
 
 
-[monitorbroker-client-{{ monitor_broker['local_control_port'] }}]
-accept = 127.0.0.1:{{ monitor_broker['local_control_port'] }}
+[monitorbroker-client-{{ monitor_broker['local_worker_port'] }}]
+accept = 127.0.0.1:{{ monitor_broker['local_worker_port'] }}
 {% for host in hosts['monitor_broker'] %}
-connect = {{ host }}:{{ monitor_broker['exposed_control_port'] }}
+connect = {{ host }}:{{ monitor_broker['exposed_worker_port'] }}
 {% endfor %}
 
 [actionbroker-client-{{ action_broker['local_sink_port'] }}]
