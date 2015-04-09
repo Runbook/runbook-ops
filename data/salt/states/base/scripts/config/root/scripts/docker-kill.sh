@@ -4,7 +4,7 @@
 ## so some manual clean up may be required
 
 ## Get List of Container ID's
-CONTAINERS=$(/usr/bin/docker ps -a | grep latest | grep Exited | awk '{print $1}')
+CONTAINERS=$(/usr/bin/docker ps -a | grep Exited | awk '{print $1}')
 
 ## For each container id remove it
 for CID in $CONTAINERS
