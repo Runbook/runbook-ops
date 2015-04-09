@@ -3,7 +3,7 @@
 broker_ip: 127.0.0.1
 broker_worker_port: {{ monitor_broker['local_worker_port'] }}
 ## StatHat EZ Key
-stathat_key: {{ stathat_ezkey }}
+stathat_ez_key: {{ stathat_ezkey }}
 envname: [{{ stathat_env }}]
 ## Sink Config
 sink_ip: 127.0.0.1
