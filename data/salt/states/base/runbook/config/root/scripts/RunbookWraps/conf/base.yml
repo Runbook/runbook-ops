@@ -1,0 +1,14 @@
+monitors:
+  Check oom:
+    url: {{ webhooks['reboot']['url'] }}
+    check_key: {{ webhooks['reboot']['key'] }}
+    cmd: /usr/lib/nagios/plugins/check_logfiles --logfile="/var/log/syslog" --criticalpattern="Out of memory.*Kill process"
+  Check salt-minion:
+    url: {{ webhooks['general']['url'] }}
+    check_key: {{ webhooks['general']['key'] }}
+    cmd: /bin/ps -p `/bin/cat /var/run/salt-minion.pid`
+    reactions:
+      restart salt-minion:
+        trigger: 1
+        callon: failed
+        cmd: /usr/bin/service salt-minion start
