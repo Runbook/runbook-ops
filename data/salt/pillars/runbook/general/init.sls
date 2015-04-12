@@ -3,7 +3,7 @@ git_branch: develop
 {% elif "staging" in grains['nodename'] %}
 git_branch: staging
 {% elif "prod" in grains['nodename'] %}
-git_branch: production
+git_branch: master
 {% endif %}
 {% if "dc01" in grains['nodename'] %}
 datacenter: dc01
