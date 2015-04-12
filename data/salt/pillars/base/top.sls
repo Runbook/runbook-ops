@@ -2,3 +2,4 @@ base:
   '*':
     - ssh
     - salt
+    - runbook
