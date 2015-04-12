@@ -1,2 +1,2 @@
-*/5 * * * * root /usr/bin/python /root/scripts/RunbookWraps/monitor.py -c /root/scripts/RunbookWraps/conf.d/base.yml --insecure --debug 2>&1 > /dev/null
-*/5 * * * * root /usr/bin/python /root/scripts/RunbookWraps/reactor.py -c /root/scripts/RunbookWraps/conf.d/base.yml --insecure --debug 2>&1 > /dev/null
+*/5 * * * * root /usr/bin/python /root/scripts/RunbookWraps/monitor.py -c /root/scripts/RunbookWraps/conf/base.yml --insecure --debug 2>&1 > /dev/null
+*/5 * * * * root /usr/bin/python /root/scripts/RunbookWraps/reactor.py -c /root/scripts/RunbookWraps/conf/base.yml --insecure --debug 2>&1 > /dev/null
