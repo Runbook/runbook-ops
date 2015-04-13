@@ -1,2 +1,2 @@
 include:
-  - runbook.servers.{{ grains['nodename'] }}
+  - runbook.servers.{{ grains['nodename']|replace(".","_") }}
