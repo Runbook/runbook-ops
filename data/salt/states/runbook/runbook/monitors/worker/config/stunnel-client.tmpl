@@ -1,0 +1,20 @@
+cert = /config/cert.pem
+key = /config/key.pem
+foreground = yes
+client = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+TIMEOUTclose = 0
+
+
+[monitorbroker-client-{{ monitor_broker['local_worker_port'] }}]
+accept = 127.0.0.1:{{ monitor_broker['local_worker_port'] }}
+{% for host in hosts['monitor_broker'] %}
+connect = {{ host }}:{{ monitor_broker['exposed_worker_port'] }}
+{% endfor %}
+
+[actionbroker-client-{{ action_broker['local_sink_port'] }}]
+accept = 127.0.0.1:{{ action_broker['local_sink_port'] }}
+{% for host in hosts['actionbroker'] %}
+connect = {{ host }}:{{ action_broker['exposed_sink_port'] }}
+{% endfor %}

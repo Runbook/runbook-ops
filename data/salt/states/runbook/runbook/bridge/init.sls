@@ -86,7 +86,7 @@ bridge-stop:
 # Build image
 bridge:
   cmd.wait:
-    - name: /usr/bin/docker build -t bridge /data/runbook/bridge
+    - name: /usr/bin/docker kill bridge; /usr/bin/docker rmi --force bridge; /usr/bin/docker build -t bridge /data/runbook/bridge
     - order: 143
     - require:
       - pkg: docker.io

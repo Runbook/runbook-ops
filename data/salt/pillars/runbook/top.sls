@@ -37,3 +37,14 @@ runbook:
     - mailchimp
     - mandrill
     - runbook.web
+  '*all*':
+    - rethinkdb
+    - redis
+    - runbook.monitors.broker
+    - runbook.monitors.control
+    - runbook.actions.broker
+    - mailchimp
+    - mandrill
+    - runbook.bridge
+    - runbook.bridge.mgmt
+    - runbook.web

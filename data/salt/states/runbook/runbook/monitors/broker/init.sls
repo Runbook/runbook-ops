@@ -29,9 +29,9 @@
     - template: jinja
     - context:
       exposed_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
-      local_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
+      local_control_port: {{ pillar['monitor_broker']['local_control_port'] }}
       exposed_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
-      local_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
+      local_worker_port: {{ pillar['monitor_broker']['local_worker_port'] }}
 
 
 /data/runbook/monitors/broker/Dockerfile:
@@ -44,9 +44,9 @@
     - template: jinja
     - context:
       exposed_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
-      local_control_port: {{ pillar['monitor_broker']['exposed_control_port'] }}
+      local_control_port: {{ pillar['monitor_broker']['local_control_port'] }}
       exposed_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
-      local_worker_port: {{ pillar['monitor_broker']['exposed_worker_port'] }}
+      local_worker_port: {{ pillar['monitor_broker']['local_worker_port'] }}
       git_branch: {{ pillar['git_branch'] }}
 
 /data/runbook/monitors/broker/config/supervisord.conf:
@@ -74,7 +74,7 @@ monitorbroker-stop:
 # Build image
 monitorbroker:
   cmd.wait:
-    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
+    - name: /usr/bin/docker kill monitorbroker; /usr/bin/docker rmi --force monitorbroker; /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
     - order: 113
     - require:
       - pkg: docker.io

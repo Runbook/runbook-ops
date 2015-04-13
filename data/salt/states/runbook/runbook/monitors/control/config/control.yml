@@ -1,5 +1,5 @@
 ## Control Configuration
-stathat_ezkey: {{ stathat_ezkey }}
+stathat_key: {{ stathat_ezkey }}
 envname: [{{ stathat_env }}]
 control_appname: {{ control['intervals'][interval]['appname'] }}
 sleep: {{ control['intervals'][interval]['sleep'] }}
