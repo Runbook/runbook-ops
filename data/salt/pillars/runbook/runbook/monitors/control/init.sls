@@ -17,5 +17,15 @@ control:
       queue: 30mincheck
       sleep: 1800
   zones:
+    {% if "dev" in grains['nodename'] %}
     dc01: Development Zone 1
     dc02: Development Zone 2 
+    {% elif "staging" in grains['nodename'] %}
+    dc01: Staging Zone 1
+    dc02: Staging Zone 2 
+    {% elif "prod" in grains['nodename'] %}
+    dc01: DigitalOcean - NYC1
+    dco2: DigitalOcean - SFO1
+    {% else %}
+    dc01: Development Zone 1
+    {% endif %}
