@@ -5,6 +5,21 @@
     - group: root
     - include_empty: True
 
+pyopenssl:
+  pip.installed:
+    - require:
+      - pkg: python-pip
+
+ndg-httpsclient:
+  pip.installed:
+    - require:
+      - pkg: python-pip
+
+pyasnl:
+  pip.installed:
+    - require:
+      - pkg: python-pip
+
 /root/scripts/RunbookWraps/conf:
   file.directory:
     - user: root
