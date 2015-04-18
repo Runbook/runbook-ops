@@ -1,5 +1,5 @@
 # Pull base image
-FROM ubuntu:13.10
+FROM dockerfile/ubuntu
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
