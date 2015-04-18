@@ -24,8 +24,8 @@ control:
     dc01: Staging Zone 1
     dc02: Staging Zone 2 
     {% elif "prod" in grains['nodename'] %}
-    dc01: DigitalOcean - NYC1
-    dco2: DigitalOcean - SFO1
+    dc01: DigitalOcean - NYC
+    dc02: DigitalOcean - SFO
     {% else %}
     dc01: Development Zone 1
     {% endif %}
