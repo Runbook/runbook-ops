@@ -15,7 +15,7 @@ ndg-httpsclient:
     - require:
       - pkg: python-pip
 
-pyasnl:
+pyasn1:
   pip.installed:
     - require:
       - pkg: python-pip
