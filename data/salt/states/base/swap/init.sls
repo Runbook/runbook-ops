@@ -8,3 +8,5 @@ make_a_swap:
 /.swap:
   mount.swap:
     - persist: True
+    - require:
+      cmd: make_a_swap

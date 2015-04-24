@@ -1,6 +1,7 @@
 base:
   '*':
     - pip
+    - swap
     - datadir
     - dockerio
     - git
