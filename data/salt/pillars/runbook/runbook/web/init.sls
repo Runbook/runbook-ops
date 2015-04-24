@@ -6,3 +6,6 @@ web:
   stripe_pubkey: update_me
   asm_privkey: update_me
   asm_url: update_me
+  zones:
+    dc1queue: DevZone 1
+    dc2queue: DevZone 2
