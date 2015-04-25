@@ -1,1 +1,1 @@
-*/30 * * * * root /usr/bin/salt -b 1 '*' state.highstate > /dev/null 2>&1
+*/5 * * * * root /root/scripts/solo.py -port=65000 /usr/bin/salt -b 1 '*' state.highstate > /dev/null 2>&1
