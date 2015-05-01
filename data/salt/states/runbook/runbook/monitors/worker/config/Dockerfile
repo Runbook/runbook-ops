@@ -3,15 +3,13 @@ FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
-# Install.
+# Install required packages
 RUN \
   apt-get update && \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
   apt-get install -y byobu curl git htop man unzip vim wget 
-
-# Install required packages
 RUN useradd -g users runapp
 RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
 RUN apt-get install -y libssl-dev libffi-dev git
