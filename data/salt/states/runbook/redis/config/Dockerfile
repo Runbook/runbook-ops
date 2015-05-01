@@ -2,7 +2,7 @@
 # This docker container implements redis with stunnel
 # stunnel is used to create encrypted communication between docker instances
 
-FROM dockerfile/ubuntu
+FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 

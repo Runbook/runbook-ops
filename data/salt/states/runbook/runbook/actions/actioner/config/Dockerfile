@@ -1,5 +1,5 @@
 # Pull base image
-FROM dockerfile/ubuntu
+FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
