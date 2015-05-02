@@ -13,7 +13,7 @@ RUN \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
   apt-get install -y byobu curl git htop man unzip vim wget
-RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
+RUN apt-get install -y python-dev python-pip
 
 # Install RethinkDB.
 RUN \

@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
-# Install.
+# Install required packages
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
   apt-get update && \
@@ -11,10 +11,8 @@ RUN \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
   apt-get install -y byobu curl git htop man unzip vim wget
-
-# Install required packages
 RUN useradd -g users runapp
-RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
+RUN apt-get install -y python-dev python-pip
 RUN apt-get install -y libssl-dev libffi-dev git
 RUN apt-get install -y stunnel supervisor
 RUN rm -rf /var/lib/apt/lists/*
