@@ -6,6 +6,15 @@ FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
+RUN \
+  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -y build-essential && \
+  apt-get install -y software-properties-common && \
+  apt-get install -y byobu curl git htop man unzip vim wget
+RUN apt-get install -y python-dev python-pip
+
 # Install RethinkDB.
 RUN \
   echo "deb http://download.rethinkdb.com/apt `lsb_release -cs` main" > /etc/apt/sources.list.d/rethinkdb.list && \
