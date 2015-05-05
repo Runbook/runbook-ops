@@ -69,7 +69,7 @@ monitorworker-stop:
 # Build image
 monitorworker:
   cmd.wait:
-    - name: /usr/bin/docker kill monitorworker; /usr/bin/docker rmi --force monitorworker; /usr/bin/docker build -t monitorworker /data/runbook/monitors/worker
+    - name: /usr/bin/docker kill monitorworker; /usr/bin/docker rmi --force monitorworker; /usr/bin/docker build -t monitorworker --no-cache=True /data/runbook/monitors/worker
     - order: 113
     - require:
       - pkg: docker.io

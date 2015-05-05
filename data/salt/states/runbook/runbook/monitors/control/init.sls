@@ -97,7 +97,7 @@
 # Build image
 control:
   cmd.wait:
-    - name: /usr/bin/docker kill control; /usr/bin/docker rmi --force control; /usr/bin/docker build -t control /data/runbook/monitors/control
+    - name: /usr/bin/docker kill control; /usr/bin/docker rmi --force control; /usr/bin/docker build -t control --no-cache=True /data/runbook/monitors/control
     - order: 143
     - require:
       - pkg: docker.io
