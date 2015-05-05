@@ -17,8 +17,8 @@ connect = {{ host }}:28015
 accept = 127.0.0.1:{{ redis['local_port'] }}
 connect = {{ hosts['redis'] }}:{{ redis['exposed_port'] }}
 
-[actionbroker-client-{{ action_broker['local_actioner_port'] }}]
-accept = 127.0.0.1:{{ action_broker['local_actioner_port'] }}
+[actionbroker-client-{{ action_broker['local_sink_port'] }}]
+accept = 127.0.0.1:{{ action_broker['local_sink_port'] }}
 {% for host in hosts['actionbroker'] %}
-connect = {{ host }}:{{ action_broker['exposed_actioner_port'] }}
+connect = {{ host }}:{{ action_broker['exposed_sink_port'] }}
 {% endfor %}

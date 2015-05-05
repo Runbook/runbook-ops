@@ -1,15 +1,18 @@
 # Pull base image
-FROM dockerfile/ubuntu
+FROM ubuntu:latest
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
-# Update
-RUN apt-get update
-RUN apt-get upgrade -y
-
 # Install required packages
+RUN \
+  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -y build-essential && \
+  apt-get install -y software-properties-common && \
+  apt-get install -y byobu curl git htop man unzip vim wget
 RUN useradd -g users runapp
-RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
+RUN apt-get install -y python-dev python-pip
 RUN apt-get install -y libssl-dev libffi-dev git
 RUN apt-get install -y stunnel supervisor
 RUN apt-get install -y nginx uwsgi uwsgi-plugins-all
