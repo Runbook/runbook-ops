@@ -80,7 +80,7 @@ actioner-stop:
 # Build image
 actioner:
   cmd.wait:
-    - name: /usr/bin/docker kill actioner; /usr/bin/docker rmi --force actioner; /usr/bin/docker build -t actioner /data/runbook/actions/actioner
+    - name: /usr/bin/docker kill actioner; /usr/bin/docker rmi --force actioner; /usr/bin/docker build -t actioner --no-cache=True /data/runbook/actions/actioner
     - order: 143
     - require:
       - pkg: docker.io
@@ -97,7 +97,7 @@ actioner:
 ## Build if image isn't present
 actioner-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t actioner /data/runbook/actions/actioner
+    - name: /usr/bin/docker build -t actioner --no-cache=True /data/runbook/actions/actioner
     - unless: /usr/bin/docker images | grep -q "actioner"
     - require:
       - git: runbook_source

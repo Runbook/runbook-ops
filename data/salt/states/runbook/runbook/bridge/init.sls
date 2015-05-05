@@ -86,7 +86,7 @@ bridge-stop:
 # Build image
 bridge:
   cmd.wait:
-    - name: /usr/bin/docker kill bridge; /usr/bin/docker rmi --force bridge; /usr/bin/docker build -t bridge /data/runbook/bridge
+    - name: /usr/bin/docker kill bridge; /usr/bin/docker rmi --force bridge; /usr/bin/docker build -t bridge --no-cache=True /data/runbook/bridge
     - order: 143
     - require:
       - pkg: docker.io
@@ -104,7 +104,7 @@ bridge:
 ## Build if image isn't present
 bridge-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t bridge /data/runbook/bridge
+    - name: /usr/bin/docker build -t bridge --no-cache=True /data/runbook/bridge
     - unless: /usr/bin/docker images | grep -q "bridge"
     - require:
       - git: runbook_source

@@ -81,7 +81,7 @@ actionbroker-stop:
 # Build image
 actionbroker:
   cmd.wait:
-    - name: /usr/bin/docker kill actionbroker; /usr/bin/docker rmi --force actionbroker; /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
+    - name: /usr/bin/docker kill actionbroker; /usr/bin/docker rmi --force actionbroker; /usr/bin/docker build -t actionbroker --no-cache=True /data/runbook/actions/broker
     - order: 123
     - require:
       - pkg: docker.io
@@ -98,7 +98,7 @@ actionbroker:
 ## Build if image isn't present
 actionbroker-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
+    - name: /usr/bin/docker build -t actionbroker --no-cache=True /data/runbook/actions/broker
     - unless: /usr/bin/docker images | grep -q "actionbroker"
     - require:
       - cmd: actionbroker-stop

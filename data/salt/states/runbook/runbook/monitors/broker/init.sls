@@ -74,7 +74,7 @@ monitorbroker-stop:
 # Build image
 monitorbroker:
   cmd.wait:
-    - name: /usr/bin/docker kill monitorbroker; /usr/bin/docker rmi --force monitorbroker; /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
+    - name: /usr/bin/docker kill monitorbroker; /usr/bin/docker rmi --force monitorbroker; /usr/bin/docker build -t monitorbroker --no-cache=True /data/runbook/monitors/broker
     - order: 113
     - require:
       - pkg: docker.io
@@ -91,7 +91,7 @@ monitorbroker:
 ## Build if image isn't present
 monitorbroker-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t monitorbroker /data/runbook/monitors/broker
+    - name: /usr/bin/docker build -t monitorbroker --no-cache=True /data/runbook/monitors/broker
     - unless: /usr/bin/docker images | grep -q "monitorbroker"
     - require:
       - git: runbook_source
