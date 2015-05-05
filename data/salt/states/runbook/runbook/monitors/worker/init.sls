@@ -86,7 +86,7 @@ monitorworker:
 ## Build if image isn't present
 monitorworker-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t monitorworker /data/runbook/monitors/worker
+    - name: /usr/bin/docker build -t monitorworker --no-cache=True /data/runbook/monitors/worker
     - unless: /usr/bin/docker images | grep -q "monitorworker"
     - require:
       - git: runbook_source

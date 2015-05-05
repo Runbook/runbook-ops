@@ -98,7 +98,7 @@ actionbroker:
 ## Build if image isn't present
 actionbroker-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t actionbroker /data/runbook/actions/broker
+    - name: /usr/bin/docker build -t actionbroker --no-cache=True /data/runbook/actions/broker
     - unless: /usr/bin/docker images | grep -q "actionbroker"
     - require:
       - cmd: actionbroker-stop

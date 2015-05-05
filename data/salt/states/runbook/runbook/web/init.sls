@@ -175,7 +175,7 @@ web:
 ## Build if image isn't present
 web-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t web /data/runbook/web
+    - name: /usr/bin/docker build -t web --no-cache=True /data/runbook/web
     - unless: /usr/bin/docker images | grep -q "web"
     - require:
       - git: runbook_source

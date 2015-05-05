@@ -116,7 +116,7 @@ control:
 ## Build if image isn't present
 control-build2:
   cmd.run:
-    - name: /usr/bin/docker build -t control /data/runbook/monitors/control
+    - name: /usr/bin/docker build -t control --no-cache=True /data/runbook/monitors/control
     - unless: /usr/bin/docker images | grep -q "control"
     - require:
       - git: runbook_source
