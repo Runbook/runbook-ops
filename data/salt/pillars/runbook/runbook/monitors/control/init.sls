@@ -1,5 +1,9 @@
 control:
   intervals:
+    5seccheck:
+      appname: 5second-control
+      queue: 5seccheck
+      sleep: 5
     30seccheck:
       appname: 30second-control
       queue: 30seccheck
