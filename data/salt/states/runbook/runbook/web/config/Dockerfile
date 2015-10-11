@@ -15,7 +15,7 @@ RUN useradd -g users runapp
 RUN apt-get install -y python-dev python-pip
 RUN apt-get install -y libssl-dev libffi-dev git
 RUN apt-get install -y stunnel supervisor
-RUN apt-get install -y nginx uwsgi uwsgi-plugins-all
+RUN apt-get install -y nginx uwsgi uwsgi-plugin-python
 RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directories
