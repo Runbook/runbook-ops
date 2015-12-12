@@ -1,5 +1,5 @@
 # Pull base image
-FROM ubuntu:latest
+FROM runbook/web:{{ git_branch }}
 
 MAINTAINER Benjamin Cane <ben@bencane.com>
 
@@ -8,30 +8,16 @@ RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
   apt-get update && \
   apt-get -y upgrade && \
-  apt-get install -y build-essential && \
-  apt-get install -y software-properties-common && \
-  apt-get install -y byobu curl git htop man unzip vim wget
-RUN useradd -g users runapp
-RUN apt-get install -y python-dev python-pip
-RUN apt-get install -y libssl-dev libffi-dev git
-RUN apt-get install -y stunnel supervisor
-RUN apt-get install -y nginx uwsgi uwsgi-plugin-python
+  apt-get install -y stunnel supervisor nginx uwsgi uwsgi-plugin-python
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN useradd -g users runapp
 
 # Create working directories
 RUN mkdir -p /code /config /data
 RUN mkdir -p /data/runstatic/public_html
 
-# Pull application source from git
-RUN git clone https://github.com/asm-products/cloudroutes-service.git --branch {{ git_branch }}
-
-# Copy Code
-RUN cp -R cloudroutes-service/src/web/* /code/
-# Copy static files
-RUN cp -R cloudroutes-service/src/web/static /data/runstatic/public_html/
-
 # Copy Configurations
-RUN cp cloudroutes-service/src/web/requirements.txt /config/requirements.txt
 ADD config/web.cfg /code/instance/web.cfg
 ADD config/stunnel-client.conf /config/stunnel-client.conf
 ADD config/supervisord.conf /config/supervisord.conf
@@ -50,7 +36,6 @@ ADD config/genstatic.py /code/genstatic.py
 
 # Install requirements
 RUN chown -R runapp:users /code /config /data/runstatic
-RUN pip install -r /config/requirements.txt
 
 # Command to run
 CMD /usr/bin/supervisord -c /config/supervisord.conf

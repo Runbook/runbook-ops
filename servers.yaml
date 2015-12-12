@@ -15,7 +15,7 @@
   box: ubuntu/trusty64
   ram: 512
   ip: 192.168.36.13
-- name: salt01001
+- name: salt
   box: ubuntu/trusty64
   ram: 1024
   ip: 192.168.36.14

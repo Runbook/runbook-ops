@@ -20,6 +20,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.box = servers["box"]
       srv.vm.hostname = servers["name"]
       srv.vm.network "private_network", ip: servers["ip"]
+      if servers["name"] == "salt"
+        srv.vm.synced_folder "data/", "/data"
+        srv.vm.synced_folder "runbook-secretops", "/root/runbook-secretops"
       srv.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["ram"]
