@@ -20,7 +20,12 @@ then
   exit 1
 fi
 
-git checkout $ENVIRONMENT && git pull && cp -vR /root/runbook-ops/* /
+if [ $SKIPPULL -eq 0 ]
+then
+  git checkout $ENVIRONMENT && git pull && cp -vR /root/runbook-ops/* /
+else
+  git checkout $ENVIRONMENT && cp -vR /root/runbook-ops/* /
+fi  
 if [ $? -ne 0 ]
 then
   echo "Error: Pulling latest data"
