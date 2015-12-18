@@ -73,7 +73,6 @@ monitorworker:
     - order: 113
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - git: runbook_source
       - cmd: monitorworker-stop

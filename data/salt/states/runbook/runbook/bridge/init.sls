@@ -90,7 +90,6 @@ bridge:
     - order: 143
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - git: runbook_source
       - cmd: bridge-stop

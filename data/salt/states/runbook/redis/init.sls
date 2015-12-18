@@ -69,7 +69,6 @@ redis-build:
     - order: 103
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - file: /data/redis/Dockerfile
       - file: /data/redis/config/redis.conf

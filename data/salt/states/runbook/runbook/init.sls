@@ -6,7 +6,7 @@
 
 runbook_source:
   git.latest:
-    - name: https://github.com/asm-products/cloudroutes-service.git
+    - name: https://github.com/Runbook/runbook.git
     - rev: {{ pillar['git_branch'] }}
     - target: /data/runbook/code
     - require:
