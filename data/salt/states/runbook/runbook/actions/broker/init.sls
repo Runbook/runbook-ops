@@ -85,7 +85,6 @@ actionbroker:
     - order: 123
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - git: runbook_source
       - cmd: actionbroker-stop

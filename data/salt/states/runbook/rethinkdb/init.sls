@@ -102,7 +102,6 @@ rethinkdb-build:
     - order: 93
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - file: /data/rethinkdb/Dockerfile
       - file: /data/rethinkdb/config/rethink.conf

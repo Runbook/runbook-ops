@@ -101,7 +101,6 @@ control:
     - order: 143
     - require:
       - pkg: docker.io
-      - service: docker.io
     - watch:
       - git: runbook_source
 {% for queue,appdetails in pillar['control']['intervals'].iteritems() %}

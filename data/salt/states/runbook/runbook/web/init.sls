@@ -137,7 +137,7 @@ web-stop:
     - order: 142
     - require:
       - pkg: docker.io
-      - service: docker.io
+      - service: docker
     - watch:
       - git: runbook_source
       - file: /data/runbook/web/Dockerfile
@@ -158,7 +158,7 @@ web:
     - order: 143
     - require:
       - pkg: docker.io
-      - service: docker.io
+      - service: docker
     - watch:
       - git: runbook_source
       - cmd: web-stop
