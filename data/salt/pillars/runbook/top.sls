@@ -14,11 +14,13 @@ runbook:
   '*monitorbroker*':
     - runbook.monitors.broker
   '*worker*':
+    - runbook.runbook
     - runbook.monitors.broker
   '*actionbroker*':
     - runbook.actions.broker
   '*actioner*':
     - runbook.actions.broker
+    - runbook.runbook
     - rethinkdb
     - redis
     - mailchimp
@@ -27,6 +29,7 @@ runbook:
     - runbook.actions.broker
     - runbook.bridge
     - runbook.bridge.mgmt
+    - runbook.runbook
     - rethinkdb
     - redis
     - mailchimp
@@ -37,9 +40,11 @@ runbook:
     - mailchimp
     - mandrill
     - runbook.web
+    - runbook.runbook
   '*all*':
     - rethinkdb
     - redis
+    - runbook.runbook
     - runbook.monitors.broker
     - runbook.monitors.control
     - runbook.actions.broker

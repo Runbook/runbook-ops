@@ -10,3 +10,5 @@ sink_ip: 127.0.0.1
 sink_port: {{ action_broker['local_sink_port'] }}
 ## Logging
 use_syslog: False
+## Crypto
+crypto_key: "{{ runbook['crypto_key'] }}"
