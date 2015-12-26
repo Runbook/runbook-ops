@@ -35,3 +35,5 @@ mandrill_api_url: "https://mandrillapp.com/api/1.0/"
 mandrill_api_key: {{ mandrill['api_key'] }}
 ## Logging
 use_syslog: False
+## Crypto
+crypto_key: "{{ runbook['crypto_key'] }}"

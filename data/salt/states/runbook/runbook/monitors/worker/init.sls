@@ -18,6 +18,7 @@
       action_broker: {{ pillar['action_broker'] }}
       stathat_env: {{ pillar['stathat_env'] }}
       stathat_ezkey: {{ pillar['stathat_ezkey'] }}
+      runbook: {{ pillar['runbook'] }}
 
 /data/runbook/monitors/worker/config/stunnel-client.conf:
   file.managed:
