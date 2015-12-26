@@ -24,6 +24,7 @@
       action_broker: {{ pillar['action_broker'] }}
       redis: {{ pillar['redis'] }}
       rethink: {{ pillar['rethink'] }}
+      runbook: {{ pillar['runbook'] }}
       stathat_env: {{ pillar['stathat_env'] }}
       stathat_ezkey: {{ pillar['stathat_ezkey'] }}
       mailchimp: {{ pillar['mailchimp'] }}
