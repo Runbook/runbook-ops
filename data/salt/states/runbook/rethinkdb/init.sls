@@ -14,7 +14,7 @@ rethinkdb:
     - dead
     - enable: False
 
-/data/rethinkdb/data/instances/{{ pillar['rethink']['db'] }}:
+/data/rethinkdb-data/instances/{{ pillar['rethink']['db'] }}:
   file.directory:
     - user: root
     - group: root
@@ -135,7 +135,7 @@ rethinkdb-build2:
     - context:
       container:
         name: rethinkdb
-        docker_args: -p "28015:28015" -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" -p "127.0.0.1:8080:8080" -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" -v "/data/rethinkdb/data:/data/rethinkdb/data" --name rethinkdb runbook-rethinkdb
+        docker_args: -p "28015:28015" -p "{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_exposed_ports'][grains['nodename']] }}" -p "127.0.0.1:8080:8080" -p "127.0.0.1:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}:{{ pillar['rethink']['cluster_local_ports'][grains['nodename']] }}" -v "/data/rethinkdb-data:/data/rethinkdb/data" --name rethinkdb runbook-rethinkdb
 
 supervisor-rethinkdb:
   service.running:
