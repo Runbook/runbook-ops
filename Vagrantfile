@@ -39,10 +39,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           inline: "echo 192.168.36.14 salt >> /etc/hosts"
         srv.vm.provision "shell",
           inline: "curl -L https://bootstrap.saltstack.com -o install_salt.sh && sh install_salt.sh"
-
+      end
       srv.vm.provision "shell",
         inline: "salt-call state.highstate"
-      end
       srv.vm.provider :virtualbox do |vb|
         vb.name = servers["name"]
         vb.memory = servers["ram"]
