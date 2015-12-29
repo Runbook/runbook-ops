@@ -1,7 +1,5 @@
 # Runbook
 
-<a href="https://assembly.com/runbook/bounties"><img src="https://asm-badger.herokuapp.com/runbook/badges/tasks.svg" height="24px" alt="Open Tasks" /></a>
-
 ## What is Runbook
 
 [Runbook](https://runbook.io) is an open source monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
