@@ -25,7 +25,6 @@ base:
     - users.devops
     - vimrc
     - wget
-#    - runbook
   'salt*':
     - salt.master
   'all*':
